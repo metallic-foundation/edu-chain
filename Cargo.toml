@@ -5,7 +5,6 @@ members = [
     "pallets/university",
     "pallets/professor",
     "pallets/student",
-    "pallets/template",
     "pallets/checked-validation",
     "traits",
 ]
