@@ -1418,82 +1418,10 @@ dependencies = [
 [[package]]
 name = "educhain-development-runtime"
 version = "4.0.0-dev"
-dependencies = [
- "frame-benchmarking",
- "frame-executive",
- "frame-support",
- "frame-system",
- "frame-system-benchmarking",
- "frame-system-rpc-runtime-api",
- "frame-try-runtime",
- "pallet-aura",
- "pallet-balances",
- "pallet-checked-validation",
- "pallet-grandpa",
- "pallet-professor",
- "pallet-randomness-collective-flip",
- "pallet-student",
- "pallet-sudo",
- "pallet-timestamp",
- "pallet-transaction-payment",
- "pallet-transaction-payment-rpc-runtime-api",
- "pallet-university",
- "parity-scale-codec",
- "scale-info",
- "sp-api",
- "sp-block-builder",
- "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
- "sp-offchain",
- "sp-runtime",
- "sp-session",
- "sp-std",
- "sp-transaction-pool",
- "sp-version",
- "substrate-wasm-builder",
- "traits",
-]
 
 [[package]]
 name = "educhain-mainnet-runtime"
 version = "4.0.0-dev"
-dependencies = [
- "frame-benchmarking",
- "frame-executive",
- "frame-support",
- "frame-system",
- "frame-system-benchmarking",
- "frame-system-rpc-runtime-api",
- "frame-try-runtime",
- "pallet-aura",
- "pallet-balances",
- "pallet-checked-validation",
- "pallet-grandpa",
- "pallet-professor",
- "pallet-randomness-collective-flip",
- "pallet-student",
- "pallet-sudo",
- "pallet-timestamp",
- "pallet-transaction-payment",
- "pallet-transaction-payment-rpc-runtime-api",
- "pallet-university",
- "parity-scale-codec",
- "scale-info",
- "sp-api",
- "sp-block-builder",
- "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
- "sp-offchain",
- "sp-runtime",
- "sp-session",
- "sp-std",
- "sp-transaction-pool",
- "sp-version",
- "substrate-wasm-builder",
- "traits",
-]
 
 [[package]]
 name = "educhain-testnet-runtime"
@@ -4025,6 +3953,7 @@ dependencies = [
  "sp-io",
  "sp-runtime",
  "traits",
+ "types",
 ]
 
 [[package]]
@@ -4063,6 +3992,7 @@ dependencies = [
  "sp-io",
  "sp-runtime",
  "traits",
+ "types",
 ]
 
 [[package]]
@@ -4113,6 +4043,7 @@ dependencies = [
  "sp-io",
  "sp-runtime",
  "traits",
+ "types",
 ]
 
 [[package]]
@@ -4204,6 +4135,7 @@ dependencies = [
  "sp-io",
  "sp-runtime",
  "traits",
+ "types",
 ]
 
 [[package]]
@@ -7915,6 +7847,10 @@ name = "typenum"
 version = "1.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
+
+[[package]]
+name = "types"
+version = "0.1.0"
 
 [[package]]
 name = "ucd-trie"
