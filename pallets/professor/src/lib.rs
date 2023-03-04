@@ -46,6 +46,10 @@ pub mod pallet {
 			// before that storage explires, respective staff ought to call this to approve the
 			// inclusion also staff need to pass the required info to match against one added by
 			// university this is same as contract signing by staff side
+			//
+			// also add the list of university in the professor info
+			// so we can query "get all university this professor is associated with"
+			// without needing to iterate all university ( which will be impractical )
 
 			Ok(())
 		}
