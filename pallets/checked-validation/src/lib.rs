@@ -18,7 +18,7 @@ pub mod pallet {
 
 		type UniversityProvider: pallet_provider_traits::UniversityProvider;
 		type StudentProvider: pallet_provider_traits::StudentProvider;
-		type StaffProvider: pallet_provider_traits::StaffProvider;
+		type ProfessorProvider: pallet_provider_traits::ProfessorProvider;
 	}
 
 	#[pallet::storage]

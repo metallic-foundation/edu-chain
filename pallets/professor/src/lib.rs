@@ -52,7 +52,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> traits::pallet_provider::StaffProvider for Pallet<T> {
+impl<T: Config> traits::pallet_provider::ProfessorProvider for Pallet<T> {
 	fn get_staff_info() {
 		todo!()
 	}

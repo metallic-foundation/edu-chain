@@ -16,7 +16,7 @@ pub mod pallet {
 	pub trait Config: frame_system::Config {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 
-		type StaffProvider: pallet_provider_traits::StaffProvider;
+		type ProfessorProvider: pallet_provider_traits::ProfessorProvider;
 		type UniversityProvider: pallet_provider_traits::UniversityProvider;
 	}
 

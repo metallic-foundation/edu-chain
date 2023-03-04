@@ -6,7 +6,7 @@ pub trait UniversityProvider {
 	fn get_university_info();
 }
 
-pub trait StaffProvider {
+pub trait ProfessorProvider {
 	fn get_staff_info();
 }
 

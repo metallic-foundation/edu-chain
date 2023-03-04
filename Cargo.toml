@@ -3,7 +3,7 @@ members = [
     "node",
     "runtime",
     "pallets/university",
-    "pallets/staff",
+    "pallets/professor",
     "pallets/student",
     "pallets/template",
     "pallets/checked-validation",
