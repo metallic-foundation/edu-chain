@@ -1,5 +1,5 @@
 [package]
-name = "node-template-runtime"
+name = "educhain-development-runtime"
 version = "4.0.0-dev"
 description = "A fresh FRAME-based Substrate node, ready for hacking."
 authors = ["Substrate DevHub <https://github.com/substrate-developer-hub>"]
@@ -48,11 +48,11 @@ frame-benchmarking = { version = "4.0.0-dev", default-features = false, git = "h
 frame-system-benchmarking = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", optional = true , branch = "polkadot-v0.9.32" }
 
 # Local Dependencies
-pallet-university = { default-features = false, path = "../pallets/university" }
-pallet-professor = { default-features = false, path = "../pallets/professor" }
-pallet-student = { default-features = false, path = "../pallets/student" }
-pallet-checked-validation = { default-features = false, path = "../pallets/checked-validation" }
-traits = { default-features = false, path = "../traits" }
+pallet-university = { default-features = false, path = "../../pallets/university" }
+pallet-professor = { default-features = false, path = "../../pallets/professor" }
+pallet-student = { default-features = false, path = "../../pallets/student" }
+pallet-checked-validation = { default-features = false, path = "../../pallets/checked-validation" }
+traits = { default-features = false, path = "../../traits" }
 
 [build-dependencies]
 substrate-wasm-builder = { version = "5.0.0-dev", git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.32" }

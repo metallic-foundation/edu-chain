@@ -1,3 +1,12 @@
+#[cfg(all(feature = "educhain-testnet-runtime", not(any(feature = "educhain-mainnet-runtime", feature = "educhain-development-runtime"))))]
+use educhain_testnet_runtime as educhain_runtime;
+
+#[cfg(all(feature = "educhain-mainnet-runtime", not(any(feature = "educhain-testnet-runtime", feature = "educhain-development-runtime"))))]
+use educhain_mainnet_runtime as educhain_runtime;
+
+#[cfg(all(feature = "educhain-development-runtime", not(any(feature = "educhain-mainnet-runtime", feature = "educhain-testnet-runtime"))))]
+use educhain_development_runtime as educhain_runtime;
+
 use crate::{
 	benchmarking::{inherent_benchmark_data, RemarkBuilder, TransferKeepAliveBuilder},
 	chain_spec,
@@ -5,7 +14,7 @@ use crate::{
 	service,
 };
 use frame_benchmarking_cli::{BenchmarkCmd, ExtrinsicFactory, SUBSTRATE_REFERENCE_HARDWARE};
-use node_template_runtime::{Block, EXISTENTIAL_DEPOSIT};
+use educhain_runtime::{Block, EXISTENTIAL_DEPOSIT};
 use sc_cli::{ChainSpec, RuntimeVersion, SubstrateCli};
 use sc_service::PartialComponents;
 use sp_keyring::Sr25519Keyring;
@@ -45,7 +54,7 @@ impl SubstrateCli for Cli {
 	}
 
 	fn native_runtime_version(_: &Box<dyn ChainSpec>) -> &'static RuntimeVersion {
-		&node_template_runtime::VERSION
+		&educhain_runtime::VERSION
 	}
 }
 

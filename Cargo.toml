@@ -1,7 +1,7 @@
 [workspace]
 members = [
     "node",
-    "runtime",
+    "runtime/testnet",
     "pallets/university",
     "pallets/professor",
     "pallets/student",

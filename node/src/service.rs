@@ -1,6 +1,15 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
-use node_template_runtime::{self, opaque::Block, RuntimeApi};
+#[cfg(all(feature = "educhain-testnet-runtime", not(any(feature = "educhain-mainnet-runtime", feature = "educhain-development-runtime"))))]
+use educhain_testnet_runtime as educhain_runtime;
+
+#[cfg(all(feature = "educhain-mainnet-runtime", not(any(feature = "educhain-testnet-runtime", feature = "educhain-development-runtime"))))]
+use educhain_mainnet_runtime as educhain_runtime;
+
+#[cfg(all(feature = "educhain-development-runtime", not(any(feature = "educhain-mainnet-runtime", feature = "educhain-testnet-runtime"))))]
+use educhain_development_runtime as educhain_runtime;
+
+use educhain_runtime::{opaque::Block, RuntimeApi};
 use sc_client_api::BlockBackend;
 use sc_consensus_aura::{ImportQueueParams, SlotProportion, StartAuraParams};
 pub use sc_executor::NativeElseWasmExecutor;
@@ -23,11 +32,11 @@ impl sc_executor::NativeExecutionDispatch for ExecutorDispatch {
 	type ExtendHostFunctions = ();
 
 	fn dispatch(method: &str, data: &[u8]) -> Option<Vec<u8>> {
-		node_template_runtime::api::dispatch(method, data)
+		educhain_runtime::api::dispatch(method, data)
 	}
 
 	fn native_version() -> sc_executor::NativeVersion {
-		node_template_runtime::native_version()
+		educhain_runtime::native_version()
 	}
 }
 
