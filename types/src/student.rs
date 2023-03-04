@@ -1,8 +1,14 @@
 /// Identifier type to uniquely represent a student
 pub type StudentId = crate::UniqId;
 
+use codec::Decode;
+use codec::Encode;
+use scale_info::TypeInfo;
+use sp_std::fmt::Debug;
+
 /// parameter required to register as student
-pub struct NewStudentParams {
+#[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug)]
+pub struct NewStudentParam {
 
 }
 

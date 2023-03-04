@@ -7,6 +7,8 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 	use traits::pallet_provider as pallet_provider_traits;
+    use types::professor::*;
+    use types::university::UniversityId;
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
@@ -36,7 +38,7 @@ pub mod pallet {
 		#[pallet::weight(10_0000)]
 		pub fn register_as_professor(
 			origin: OriginFor<T>,
-			professor_id: (),
+			professor_id: ProfessorId,
 			info: (),
 			identitiy: (),
 		) -> DispatchResult {
@@ -51,7 +53,7 @@ pub mod pallet {
 		#[pallet::weight(10_000)]
 		pub fn approve_staff_inclusion(
 			origin: OriginFor<T>,
-			university_id: (),
+			university_id: UniversityId,
 			info_to_approve: (),
 		) -> DispatchResult {
 			// Once university calls university::add_staff

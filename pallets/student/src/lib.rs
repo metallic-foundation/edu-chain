@@ -7,6 +7,8 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 	use traits::pallet_provider as pallet_provider_traits;
+    use types::student::*;
+    use types::university::UniversityId;
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
@@ -38,7 +40,7 @@ pub mod pallet {
 		#[pallet::weight(10_000)]
 		pub fn send_application(
 			origin: OriginFor<T>,
-			university_id: (),
+			university_id: UniversityId,
 			student_info: (),
 			course_id: (),
 		) -> DispatchResult {

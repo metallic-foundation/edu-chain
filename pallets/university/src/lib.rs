@@ -7,6 +7,10 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 	use traits::pallet_provider as pallet_provider_traits;
+    use types::university::*;
+    use types::student::StudentId;
+    use types::professor::ProfessorId;
+    use types::professor::NewProfessorParam;
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
@@ -34,7 +38,7 @@ pub mod pallet {
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
 		#[pallet::weight(10_000)]
-		pub fn register_university(origin: OriginFor<T>, info: ()) -> DispatchResult {
+		pub fn register_university(origin: OriginFor<T>, university_id: UniversityId, info: NewUniversityParam) -> DispatchResult {
 			// regitser this university with given info
 			// info might be something like:
 			// Info {
@@ -48,9 +52,9 @@ pub mod pallet {
 		#[pallet::weight(10_000)]
 		pub fn add_professor(
 			origin: OriginFor<T>,
-			university_id: (),
-			professor_id: (),
-			info: (),
+			university_id: UniversityId,
+			professor_id: ProfessorId,
+			info: NewProfessorParam,
 		) -> DispatchResult {
 			// sign a contract by university to add the already registered professor to this
 			// university note: professor_id is independent to university_id. i.e professor can
@@ -74,7 +78,7 @@ pub mod pallet {
 		#[pallet::weight(10_000)]
 		pub fn issue_certificate(
 			origin: OriginFor<T>,
-			student_id: (),
+			student_id: StudentId,
 			certificate: (),
 		) -> DispatchResult {
 			// issue a certificate to student student_id
