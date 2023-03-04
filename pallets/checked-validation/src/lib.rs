@@ -50,6 +50,17 @@ pub mod pallet {
 		}
 
 		#[pallet::weight(10_000)]
+		pub fn validate_professor(
+			origin: OriginFor<T>,
+			validator_id: (),
+			validated_kyc: (),
+		) -> DispatchResult {
+			// same as validate_university but for professors
+
+			Ok(())
+		}
+
+		#[pallet::weight(10_000)]
 		pub fn add_validator(
 			origin: OriginFor<T>,
 			validator_info: (),
