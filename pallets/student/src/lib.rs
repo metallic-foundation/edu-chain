@@ -46,6 +46,23 @@ pub mod pallet {
 
 			Ok(())
 		}
+
+		#[pallet::weight(10_000)]
+		pub fn submit_thesis(origin: OriginFor<T>, thesis_id: (), thesis: ()) -> DispatchResult {
+			// way to submit the thesis
+			// thesis-id will be some unique id ( pref. string hash which can be generted from
+			// client side app ) thesis: will be the document link to ipfs where thesis is actually
+			// written
+
+			// also keep the status of this submission
+			// which shall be approved by the professor of thesis_id
+			// and always keep the submission if the thesis is rejected ( with rejected status )
+
+			// Question: also provide a way to have a time bound on until when the thesis
+			// can be submitted ( this info will be stored under thesis_id )
+
+			Ok(())
+		}
 	}
 }
 
