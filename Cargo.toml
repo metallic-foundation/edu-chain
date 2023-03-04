@@ -4,6 +4,7 @@ members = [
     "runtime",
     "pallets/university",
     "pallets/staff",
+    "pallets/student",
     "pallets/template",
     "traits",
 ]
