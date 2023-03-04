@@ -26,15 +26,28 @@ pub mod pallet {
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
-	pub enum Event<T: Config> {
-		SomethingStored { something: u32, who: T::AccountId },
-	}
+	pub enum Event<T: Config> {}
 
 	#[pallet::error]
 	pub enum Error<T> {}
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
+		#[pallet::weight(10_0000)]
+		pub fn register_as_professor(
+			origin: OriginFor<T>,
+			professor_id: (),
+			info: (),
+			identitiy: (),
+		) -> DispatchResult {
+			// register this user as professor under professor_id
+			// identity is the permanent identity of this user which will be hash of ipfs link
+			// info is changable informarmation about professor ( eg: which university is he
+			// associated to )
+
+			Ok(())
+		}
+
 		#[pallet::weight(10_000)]
 		pub fn approve_staff_inclusion(
 			origin: OriginFor<T>,
