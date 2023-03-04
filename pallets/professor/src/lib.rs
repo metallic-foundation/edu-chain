@@ -7,7 +7,7 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 	use traits::pallet_provider as pallet_provider_traits;
-	use types::{professor::*, university::UniversityId};
+	use types::{professor::*, university::UniversityId, IpfsLink};
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
@@ -39,7 +39,7 @@ pub mod pallet {
 			origin: OriginFor<T>,
 			professor_id: ProfessorId,
 			info: (),
-			identitiy: (),
+			identitiy: IpfsLink,
 		) -> DispatchResult {
 			// register this user as professor under professor_id
 			// identity is the permanent identity of this user which will be hash of ipfs link
@@ -74,7 +74,7 @@ pub mod pallet {
 			thesis_id: (),
 			faculty: (),
 			thesis_requirements: (),
-			info: (),
+			info: IpfsLink,
 		) -> DispatchResult {
 			// announce that the thesis is due submission for all students in faculty
 			// thesis_id is a unique hash that will be generated from front-end app for easy purpose

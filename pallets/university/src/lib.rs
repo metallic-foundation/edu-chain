@@ -11,6 +11,7 @@ pub mod pallet {
 		professor::{NewProfessorParam, ProfessorId},
 		student::StudentId,
 		university::*,
+		IpfsLink,
 	};
 
 	#[pallet::pallet]
@@ -84,7 +85,7 @@ pub mod pallet {
 		pub fn issue_certificate(
 			origin: OriginFor<T>,
 			student_id: StudentId,
-			certificate: (),
+			certificate: IpfsLink,
 		) -> DispatchResult {
 			// issue a certificate to student student_id
 			// cerificate is the ipfs link to certificate docoument

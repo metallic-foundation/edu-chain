@@ -12,3 +12,7 @@ use sp_std::fmt::Debug;
 /// this better to be a had bytes
 #[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, MaxEncodedLen, Clone)]
 pub struct UniqId {}
+
+/// Structure to represent the IPFS link
+#[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, MaxEncodedLen, Clone)]
+pub struct IpfsLink {}

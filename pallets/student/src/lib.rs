@@ -7,7 +7,7 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 	use traits::pallet_provider as pallet_provider_traits;
-	use types::{student::*, university::UniversityId};
+	use types::{student::*, university::UniversityId, IpfsLink};
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
@@ -49,7 +49,11 @@ pub mod pallet {
 		}
 
 		#[pallet::weight(10_000)]
-		pub fn submit_thesis(origin: OriginFor<T>, thesis_id: (), thesis: ()) -> DispatchResult {
+		pub fn submit_thesis(
+			origin: OriginFor<T>,
+			thesis_id: (),
+			thesis: IpfsLink,
+		) -> DispatchResult {
 			// way to submit the thesis
 			// thesis-id will be some unique id ( pref. string hash which can be generted from
 			// client side app ) thesis: will be the document link to ipfs where thesis is actually
