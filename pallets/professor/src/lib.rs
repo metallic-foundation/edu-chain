@@ -49,6 +49,23 @@ pub mod pallet {
 
 			Ok(())
 		}
+
+		#[pallet::weight(10_000)]
+		pub fn announce_thesis(
+			origin: OriginFor<T>,
+			thesis_id: (),
+			faculty: (),
+			thesis_requirements: (),
+			info: (),
+		) -> DispatchResult {
+			// announce that the thesis is due submission for all students in faculty
+			// thesis_id is a unique hash that will be generated from front-end app for easy purpose
+			// thesis_requirement is the link to ipfs document that describe what the thesis should
+			// be about info is the external info of this thesis ( eg: submission due date, credit
+			// weight )
+
+			Ok(())
+		}
 	}
 }
 
