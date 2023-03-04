@@ -20,13 +20,22 @@
 //!
 //! Should only be used for benchmarking as it may break in other contexts.
 
-#[cfg(all(feature = "educhain-testnet-runtime", not(any(feature = "educhain-mainnet-runtime", feature = "educhain-development-runtime"))))]
+#[cfg(all(
+	feature = "educhain-testnet-runtime",
+	not(any(feature = "educhain-mainnet-runtime", feature = "educhain-development-runtime"))
+))]
 use educhain_testnet_runtime as educhain_runtime;
 
-#[cfg(all(feature = "educhain-mainnet-runtime", not(any(feature = "educhain-testnet-runtime", feature = "educhain-development-runtime"))))]
+#[cfg(all(
+	feature = "educhain-mainnet-runtime",
+	not(any(feature = "educhain-testnet-runtime", feature = "educhain-development-runtime"))
+))]
 use educhain_mainnet_runtime as educhain_runtime;
 
-#[cfg(all(feature = "educhain-development-runtime", not(any(feature = "educhain-mainnet-runtime", feature = "educhain-testnet-runtime"))))]
+#[cfg(all(
+	feature = "educhain-development-runtime",
+	not(any(feature = "educhain-mainnet-runtime", feature = "educhain-testnet-runtime"))
+))]
 use educhain_development_runtime as educhain_runtime;
 
 use crate::service::FullClient;

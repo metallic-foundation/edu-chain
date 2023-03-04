@@ -1,17 +1,13 @@
 /// Identifier type to uniquely represent a professor
 pub type ProfessorId = crate::UniqId;
 
-use codec::Decode;
-use codec::Encode;
+use codec::{Decode, Encode};
 use scale_info::TypeInfo;
 use sp_std::fmt::Debug;
 
 /// Required paramater to register this professor
 #[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug)]
-pub struct NewProfessorParam {
-
-}
+pub struct NewProfessorParam {}
 
 /// Information of a professor
-pub struct Professor {
-}
+pub struct Professor {}

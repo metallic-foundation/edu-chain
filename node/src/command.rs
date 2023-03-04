@@ -1,10 +1,19 @@
-#[cfg(all(feature = "educhain-testnet-runtime", not(any(feature = "educhain-mainnet-runtime", feature = "educhain-development-runtime"))))]
+#[cfg(all(
+	feature = "educhain-testnet-runtime",
+	not(any(feature = "educhain-mainnet-runtime", feature = "educhain-development-runtime"))
+))]
 use educhain_testnet_runtime as educhain_runtime;
 
-#[cfg(all(feature = "educhain-mainnet-runtime", not(any(feature = "educhain-testnet-runtime", feature = "educhain-development-runtime"))))]
+#[cfg(all(
+	feature = "educhain-mainnet-runtime",
+	not(any(feature = "educhain-testnet-runtime", feature = "educhain-development-runtime"))
+))]
 use educhain_mainnet_runtime as educhain_runtime;
 
-#[cfg(all(feature = "educhain-development-runtime", not(any(feature = "educhain-mainnet-runtime", feature = "educhain-testnet-runtime"))))]
+#[cfg(all(
+	feature = "educhain-development-runtime",
+	not(any(feature = "educhain-mainnet-runtime", feature = "educhain-testnet-runtime"))
+))]
 use educhain_development_runtime as educhain_runtime;
 
 use crate::{
@@ -13,8 +22,8 @@ use crate::{
 	cli::{Cli, Subcommand},
 	service,
 };
-use frame_benchmarking_cli::{BenchmarkCmd, ExtrinsicFactory, SUBSTRATE_REFERENCE_HARDWARE};
 use educhain_runtime::{Block, EXISTENTIAL_DEPOSIT};
+use frame_benchmarking_cli::{BenchmarkCmd, ExtrinsicFactory, SUBSTRATE_REFERENCE_HARDWARE};
 use sc_cli::{ChainSpec, RuntimeVersion, SubstrateCli};
 use sc_service::PartialComponents;
 use sp_keyring::Sr25519Keyring;

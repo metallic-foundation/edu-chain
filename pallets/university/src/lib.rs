@@ -7,10 +7,11 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 	use traits::pallet_provider as pallet_provider_traits;
-    use types::university::*;
-    use types::student::StudentId;
-    use types::professor::ProfessorId;
-    use types::professor::NewProfessorParam;
+	use types::{
+		professor::{NewProfessorParam, ProfessorId},
+		student::StudentId,
+		university::*,
+	};
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
@@ -38,7 +39,11 @@ pub mod pallet {
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
 		#[pallet::weight(10_000)]
-		pub fn register_university(origin: OriginFor<T>, university_id: UniversityId, info: NewUniversityParam) -> DispatchResult {
+		pub fn register_university(
+			origin: OriginFor<T>,
+			university_id: UniversityId,
+			info: NewUniversityParam,
+		) -> DispatchResult {
 			// regitser this university with given info
 			// info might be something like:
 			// Info {
