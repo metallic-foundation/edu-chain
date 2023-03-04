@@ -6,6 +6,7 @@ members = [
     "pallets/staff",
     "pallets/student",
     "pallets/template",
+    "pallets/checked-validation",
     "traits",
 ]
 [profile.release]

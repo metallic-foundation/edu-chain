@@ -11,5 +11,5 @@ pub trait StaffProvider {
 }
 
 pub trait ValidationProvider {
-	fn is_validated_university() -> bool;
+	fn is_verified_university() -> bool;
 }
