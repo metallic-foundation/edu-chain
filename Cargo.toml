@@ -3,6 +3,7 @@ members = [
     "node",
     "runtime",
     "pallets/university",
+    "pallets/staff",
     "pallets/template",
     "traits",
 ]
