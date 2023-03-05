@@ -18,6 +18,10 @@ pub trait ExamProvider {
 	fn get_exam_info();
 }
 
+pub trait ScholarshipProvider {
+	fn get_scholarship_info();
+}
+
 pub trait ValidationProvider {
 	fn is_verified_university() -> bool;
 }

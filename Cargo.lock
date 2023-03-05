@@ -1442,6 +1442,7 @@ dependencies = [
  "pallet-lecture",
  "pallet-professor",
  "pallet-randomness-collective-flip",
+ "pallet-scholarship",
  "pallet-student",
  "pallet-sudo",
  "pallet-timestamp",
@@ -4041,6 +4042,22 @@ dependencies = [
  "scale-info",
  "sp-runtime",
  "sp-std",
+]
+
+[[package]]
+name = "pallet-scholarship"
+version = "4.0.0-dev"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "traits",
+ "types",
 ]
 
 [[package]]

@@ -49,11 +49,9 @@ pub use pallet_checked_validation;
 pub use pallet_exam;
 pub use pallet_lecture;
 pub use pallet_professor;
+pub use pallet_scholarship;
 pub use pallet_student;
-/// Import local pallets.
 pub use pallet_university;
-
-///
 pub use traits;
 
 /// An index to a block.
@@ -286,6 +284,8 @@ impl pallet_university::Config for Runtime {
 	type ProfessorProvider = Professor;
 	type StudentProvider = Student;
 	type LectureProvider = Lecture;
+	type ExamProvider = Exam;
+	type ScholarshipProvider = Scholarship;
 }
 
 impl pallet_professor::Config for Runtime {
@@ -313,6 +313,15 @@ impl pallet_exam::Config for Runtime {
 	type ProfessorProvider = Professor;
 	type StudentProvider = Student;
 	type LectureProvider = Lecture;
+}
+
+impl pallet_scholarship::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type UniversityProvider = University;
+	type ProfessorProvider = Professor;
+	type StudentProvider = Student;
+	type LectureProvider = Lecture;
+	type ExamProvider = Exam;
 }
 
 impl pallet_checked_validation::Config for Runtime {
@@ -344,6 +353,7 @@ construct_runtime!(
 		Student: pallet_student::{Pallet, Call, Storage, Event<T>},
 		Lecture: pallet_lecture::{Pallet, Call, Storage, Event<T>},
 		Exam: pallet_exam::{Pallet, Call, Storage, Event<T>},
+		Scholarship: pallet_scholarship::{Pallet, Call, Storage, Event<T>},
 		CheckedValidation: pallet_checked_validation::{Pallet, Call, Storage, Event<T>},
 	}
 
@@ -398,6 +408,7 @@ mod benches {
 		[pallet_student, Student]
 		[pallet_lecture, Lecture]
 		[pallet_exam, Exam]
+		[pallet_scholarship, Scholarship]
 		[pallet_checked_validation: CheckedValidation]
 	);
 }

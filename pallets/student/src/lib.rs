@@ -5,7 +5,7 @@ pub use pallet::*;
 #[frame_support::pallet]
 pub mod pallet {
 	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::*;
+	use frame_system::pallet_prelude::{OriginFor, *};
 	use traits::pallet_provider as pallet_provider_traits;
 	use types::{student::*, university::UniversityId, IpfsLink};
 
@@ -67,6 +67,23 @@ pub mod pallet {
 
 			// Question: also provide a way to have a time bound on until when the thesis
 			// can be submitted ( this info will be stored under thesis_id )
+
+			Ok(())
+		}
+
+		#[pallet::weight(10_000)]
+		pub fn accept_scholarship(origin: OriginFor<T>, scholarship_id: ()) -> DispatchResult {
+			// once the hoster of scholarship grant the scholarship to this student
+			// student shall accept the scholarship to finalize the process
+			//
+			// TODO:
+			// find a way to always keep this balance non-withdrable
+			// i.e shall only be used within the university
+			// and non-used credits can be re-used somehow
+			// this can be done by creating a new pallet_balance type
+			// interface which have one more filed like locked,free,reserved
+			// i.e field grant which act as free to be used within academic and
+			// act as locked when doing other transaction
 
 			Ok(())
 		}

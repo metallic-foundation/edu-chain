@@ -3,6 +3,7 @@
 pub mod exam;
 pub mod lecture;
 pub mod professor;
+pub mod scholarship;
 pub mod student;
 pub mod university;
 

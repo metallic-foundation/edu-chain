@@ -53,6 +53,7 @@ pallet-professor = { default-features = false, path = "../../pallets/professor" 
 pallet-student = { default-features = false, path = "../../pallets/student" }
 pallet-lecture = { default-features = false, path = "../../pallets/lecture" }
 pallet-exam = { default-features = false, path = "../../pallets/exam" }
+pallet-scholarship = { default-features = false, path = "../../pallets/scholarship" }
 pallet-checked-validation = { default-features = false, path = "../../pallets/checked-validation" }
 traits = { default-features = false, path = "../../traits" }
 
@@ -67,6 +68,7 @@ std = [
 	"pallet-student/std",
   "pallet-lecture/std",
   "pallet-exam/std",
+  "pallet-scholarship/std",
 	"pallet-checked-validation/std",
   "traits/std",
 
@@ -106,6 +108,7 @@ runtime-benchmarks = [
 	"pallet-student/runtime-benchmarks",
   "pallet-lecture/runtime-benchmarks",
   "pallet-exam/runtime-benchmarks",
+  "pallet-scholarship/runtime-benchmarks",
 	"pallet-checked-validation/runtime-benchmarks",
 
 	"frame-benchmarking/runtime-benchmarks",
@@ -123,6 +126,7 @@ try-runtime = [
 	"pallet-student/try-runtime",
   "pallet-lecture/try-runtime",
   "pallet-lecture/try-runtime",
+  "pallet-scholarship/try-runtime",
 	"pallet-checked-validation/try-runtime",
 
 	"frame-try-runtime",
