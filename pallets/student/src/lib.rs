@@ -5,9 +5,9 @@ pub use pallet::*;
 #[frame_support::pallet]
 pub mod pallet {
 	use frame_support::pallet_prelude::*;
-	use frame_system::pallet_prelude::{OriginFor, *};
+	use frame_system::pallet_prelude::*;
 	use traits::pallet_provider as pallet_provider_traits;
-	use types::{student::*, university::UniversityId, IpfsLink};
+	use types::{primitives::IpfsLink, student::*, university::UniversityId};
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]

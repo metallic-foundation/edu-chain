@@ -8,10 +8,10 @@ pub mod pallet {
 	use frame_system::pallet_prelude::*;
 	use traits::pallet_provider as pallet_provider_traits;
 	use types::{
+		primitives::IpfsLink,
 		professor::{NewProfessorParam, ProfessorId},
 		student::StudentId,
 		university::*,
-		IpfsLink,
 	};
 
 	#[pallet::pallet]
