@@ -40,10 +40,12 @@ pub mod pallet {
 		pub fn send_application(
 			origin: OriginFor<T>,
 			university_id: UniversityId,
+			application_id: (),
 			student_info: (),
 			course_id: (),
 		) -> DispatchResult {
 			// send application to get admission in university
+			//
 
 			Ok(())
 		}

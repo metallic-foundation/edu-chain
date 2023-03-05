@@ -83,6 +83,19 @@ pub mod pallet {
 		}
 
 		#[pallet::weight(10_000)]
+		pub fn accept_student_application(
+			origin: OriginFor<T>,
+			application_id: (),
+		) -> DispatchResult {
+			// accept the application of university to enroll in this course
+			// while sending the application, student also specify on which intake they want to join
+			// after that intake duration has passed, the application will be removed ( unless
+			// specified by student )
+
+			Ok(())
+		}
+
+		#[pallet::weight(10_000)]
 		pub fn issue_certificate(
 			origin: OriginFor<T>,
 			student_id: StudentId,
