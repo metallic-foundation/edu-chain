@@ -46,6 +46,7 @@ pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
 
 pub use pallet_checked_validation;
+pub use pallet_lecture;
 pub use pallet_professor;
 pub use pallet_student;
 /// Import local pallets.
@@ -283,6 +284,7 @@ impl pallet_university::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type ProfessorProvider = Professor;
 	type StudentProvider = Student;
+	type LectureProvider = Lecture;
 }
 
 impl pallet_professor::Config for Runtime {
@@ -295,6 +297,13 @@ impl pallet_student::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type UniversityProvider = University;
 	type ProfessorProvider = Professor;
+}
+
+impl pallet_lecture::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type UniversityProvider = University;
+	type ProfessorProvider = Professor;
+	type StudentProvider = Student;
 }
 
 impl pallet_checked_validation::Config for Runtime {
@@ -321,10 +330,11 @@ construct_runtime!(
 		TransactionPayment: pallet_transaction_payment,
 		Sudo: pallet_sudo,
 
-		CheckedValidation: pallet_checked_validation::{Pallet, Call, Storage, Event<T>},
 		University: pallet_university::{Pallet, Call, Storage, Event<T>},
 		Professor: pallet_professor::{Pallet, Call, Storage, Event<T>},
 		Student: pallet_student::{Pallet, Call, Storage, Event<T>},
+		Lecture: pallet_lecture::{Pallet, Call, Storage, Event<T>},
+		CheckedValidation: pallet_checked_validation::{Pallet, Call, Storage, Event<T>},
 	}
 
 );
@@ -375,7 +385,8 @@ mod benches {
 
 		[pallet_university, University]
 		[pallet_professor, Professor]
-		[pallet_student, Studnet]
+		[pallet_student, Student]
+		[pallet_lecture, Lecture]
 		[pallet_checked_validation: CheckedValidation]
 	);
 }

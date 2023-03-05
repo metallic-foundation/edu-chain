@@ -5,6 +5,7 @@ members = [
     "pallets/university",
     "pallets/professor",
     "pallets/student",
+    "pallets/lecture",
     "pallets/checked-validation",
     "traits",
     "types",

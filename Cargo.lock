@@ -1438,6 +1438,7 @@ dependencies = [
  "pallet-balances",
  "pallet-checked-validation",
  "pallet-grandpa",
+ "pallet-lecture",
  "pallet-professor",
  "pallet-randomness-collective-flip",
  "pallet-student",
@@ -3977,6 +3978,22 @@ dependencies = [
  "sp-session",
  "sp-staking",
  "sp-std",
+]
+
+[[package]]
+name = "pallet-lecture"
+version = "4.0.0-dev"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "traits",
+ "types",
 ]
 
 [[package]]

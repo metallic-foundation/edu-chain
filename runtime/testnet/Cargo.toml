@@ -51,6 +51,7 @@ frame-system-benchmarking = { version = "4.0.0-dev", default-features = false, g
 pallet-university = { default-features = false, path = "../../pallets/university" }
 pallet-professor = { default-features = false, path = "../../pallets/professor" }
 pallet-student = { default-features = false, path = "../../pallets/student" }
+pallet-lecture = { default-features = false, path = "../../pallets/lecture" }
 pallet-checked-validation = { default-features = false, path = "../../pallets/checked-validation" }
 traits = { default-features = false, path = "../../traits" }
 
@@ -63,6 +64,7 @@ std = [
 	"pallet-university/std",
 	"pallet-professor/std",
 	"pallet-student/std",
+  "pallet-lecture/std",
 	"pallet-checked-validation/std",
   "traits/std",
 
@@ -100,6 +102,7 @@ runtime-benchmarks = [
 	"pallet-university/runtime-benchmarks",
 	"pallet-professor/runtime-benchmarks",
 	"pallet-student/runtime-benchmarks",
+  "pallet-lecture/runtime-benchmarks",
 	"pallet-checked-validation/runtime-benchmarks",
 
 	"frame-benchmarking/runtime-benchmarks",
@@ -115,6 +118,7 @@ try-runtime = [
 	"pallet-university/try-runtime",
 	"pallet-professor/try-runtime",
 	"pallet-student/try-runtime",
+  "pallet-lecture/try-runtime",
 	"pallet-checked-validation/try-runtime",
 
 	"frame-try-runtime",
