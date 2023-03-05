@@ -6,6 +6,7 @@ members = [
     "pallets/professor",
     "pallets/student",
     "pallets/lecture",
+    "pallets/exam",
     "pallets/checked-validation",
     "traits",
     "types",

@@ -46,6 +46,7 @@ pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
 
 pub use pallet_checked_validation;
+pub use pallet_exam;
 pub use pallet_lecture;
 pub use pallet_professor;
 pub use pallet_student;
@@ -306,6 +307,14 @@ impl pallet_lecture::Config for Runtime {
 	type StudentProvider = Student;
 }
 
+impl pallet_exam::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type UniversityProvider = University;
+	type ProfessorProvider = Professor;
+	type StudentProvider = Student;
+	type LectureProvider = Lecture;
+}
+
 impl pallet_checked_validation::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type UniversityProvider = University;
@@ -334,6 +343,7 @@ construct_runtime!(
 		Professor: pallet_professor::{Pallet, Call, Storage, Event<T>},
 		Student: pallet_student::{Pallet, Call, Storage, Event<T>},
 		Lecture: pallet_lecture::{Pallet, Call, Storage, Event<T>},
+		Exam: pallet_exam::{Pallet, Call, Storage, Event<T>},
 		CheckedValidation: pallet_checked_validation::{Pallet, Call, Storage, Event<T>},
 	}
 
@@ -387,6 +397,7 @@ mod benches {
 		[pallet_professor, Professor]
 		[pallet_student, Student]
 		[pallet_lecture, Lecture]
+		[pallet_exam, Exam]
 		[pallet_checked_validation: CheckedValidation]
 	);
 }

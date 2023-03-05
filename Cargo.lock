@@ -1437,6 +1437,7 @@ dependencies = [
  "pallet-aura",
  "pallet-balances",
  "pallet-checked-validation",
+ "pallet-exam",
  "pallet-grandpa",
  "pallet-lecture",
  "pallet-professor",
@@ -3943,6 +3944,22 @@ dependencies = [
 
 [[package]]
 name = "pallet-checked-validation"
+version = "4.0.0-dev"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "traits",
+ "types",
+]
+
+[[package]]
+name = "pallet-exam"
 version = "4.0.0-dev"
 dependencies = [
  "frame-benchmarking",
