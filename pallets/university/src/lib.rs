@@ -105,6 +105,11 @@ pub mod pallet {
 		) -> DispatchResult {
 			// issue a certificate to student student_id
 			// cerificate is the ipfs link to certificate docoument
+			// or certificate can be a detailed struct stored in chain
+			// and making a presentable certificate camn be offloaded to front-end side
+			// we will receive a html file ( with no js and no external stylesheet )
+			// approve it and then pass these details to make a certofocate accorsing to the
+			// university design
 
 			Ok(())
 		}
