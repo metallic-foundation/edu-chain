@@ -1,5 +1,5 @@
 // Identifier type to uniquely represent a scholarship
-pub type ScholarshipId = crate::UniqId;
+pub type ScholarshipId = crate::primitives::UniqId;
 
 use codec::{Decode, Encode};
 use scale_info::TypeInfo;

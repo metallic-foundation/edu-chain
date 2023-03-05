@@ -1,5 +1,5 @@
 /// Identifier type to uniquely represent a lecture
-pub type LectureId = crate::UniqId;
+pub type LectureId = crate::primitives::UniqId;
 
 use codec::{Decode, Encode};
 use scale_info::TypeInfo;

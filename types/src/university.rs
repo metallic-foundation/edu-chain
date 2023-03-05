@@ -1,5 +1,5 @@
 /// Identifier type to uniquely represent a university
-pub type UniversityId = crate::UniqId;
+pub type UniversityId = crate::primitives::UniqId;
 
 use codec::{Decode, Encode};
 use scale_info::TypeInfo;

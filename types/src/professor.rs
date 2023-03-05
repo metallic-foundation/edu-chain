@@ -1,5 +1,5 @@
 /// Identifier type to uniquely represent a professor
-pub type ProfessorId = crate::UniqId;
+pub type ProfessorId = crate::primitives::UniqId;
 
 use codec::{Decode, Encode};
 use scale_info::TypeInfo;

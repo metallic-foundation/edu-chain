@@ -1,5 +1,5 @@
 /// Identifier type to uniquely represent a exam
-pub type ExamId = crate::UniqId;
+pub type ExamId = crate::primitives::UniqId;
 
 use codec::{Decode, Encode};
 use scale_info::TypeInfo;

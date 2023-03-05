@@ -1,5 +1,5 @@
 /// Identifier type to uniquely represent a student
-pub type StudentId = crate::UniqId;
+pub type StudentId = crate::primitives::UniqId;
 
 use codec::{Decode, Encode};
 use scale_info::TypeInfo;
