@@ -1,18 +1,11 @@
-use std::{convert::TryInto, sync::Arc};
+use std::sync::Arc;
 
-use codec::{Codec, Decode};
-use jsonrpsee::{
-	core::{Error as JsonRpseeError, RpcResult},
-	proc_macros::rpc,
-	types::error::{CallError, ErrorCode, ErrorObject},
-};
-use sp_api::{ApiExt, ProvideRuntimeApi};
+use jsonrpsee::{core::RpcResult, proc_macros::rpc};
+use sp_api::ProvideRuntimeApi;
 use sp_blockchain::HeaderBackend;
-use sp_core::Bytes;
-use sp_rpc::number::NumberOrHex;
-use sp_runtime::traits::{Block as BlockT, MaybeDisplay};
+use sp_runtime::traits::Block as BlockT;
 
-pub use pallet_university_rpc_runtime_api::PalletUniversityApi as UniversityRuntimeApi;
+pub use chain_rpc_runtime_api::university::PalletUniversityApi as UniversityRuntimeApi;
 
 #[rpc(client, server)]
 pub trait UniversityApi<BlockHash> {

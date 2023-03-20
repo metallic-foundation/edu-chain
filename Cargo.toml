@@ -11,8 +11,8 @@ members = [
     "pallets/checked-validation",
     "traits",
     "types",
-    "pallets/university/rpc",
-    "pallets/university/rpc/runtime-api",
+    "chain-rpc/rpc",
+    "chain-rpc/runtime-api"
 ]
 [profile.release]
 panic = "unwind"

@@ -711,6 +711,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "chain-rpc"
+version = "0.1.0"
+dependencies = [
+ "chain-rpc-runtime-api",
+ "jsonrpsee",
+ "parity-scale-codec",
+ "sp-api",
+ "sp-blockchain",
+ "sp-core",
+ "sp-rpc",
+ "sp-runtime",
+ "sp-weights",
+]
+
+[[package]]
+name = "chain-rpc-runtime-api"
+version = "0.1.0"
+dependencies = [
+ "pallet-university",
+ "parity-scale-codec",
+ "sp-api",
+ "sp-runtime",
+ "sp-weights",
+]
+
+[[package]]
 name = "chrono"
 version = "0.4.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1427,6 +1453,7 @@ version = "4.0.0-dev"
 name = "educhain-testnet-runtime"
 version = "4.0.0-dev"
 dependencies = [
+ "chain-rpc-runtime-api",
  "frame-benchmarking",
  "frame-executive",
  "frame-support",
@@ -1449,7 +1476,6 @@ dependencies = [
  "pallet-transaction-payment",
  "pallet-transaction-payment-rpc-runtime-api",
  "pallet-university",
- "pallet-university-rpc-runtime-api",
  "parity-scale-codec",
  "scale-info",
  "sp-api",
@@ -3716,6 +3742,7 @@ dependencies = [
 name = "node-template"
 version = "4.0.0-dev"
 dependencies = [
+ "chain-rpc",
  "clap",
  "educhain-development-runtime",
  "educhain-mainnet-runtime",
@@ -3726,7 +3753,6 @@ dependencies = [
  "jsonrpsee",
  "pallet-transaction-payment",
  "pallet-transaction-payment-rpc",
- "pallet-university-rpc",
  "sc-basic-authorship",
  "sc-cli",
  "sc-client-api",
@@ -4189,32 +4215,6 @@ dependencies = [
  "sp-runtime",
  "traits",
  "types",
-]
-
-[[package]]
-name = "pallet-university-rpc"
-version = "0.1.0"
-dependencies = [
- "jsonrpsee",
- "pallet-university-rpc-runtime-api",
- "parity-scale-codec",
- "sp-api",
- "sp-blockchain",
- "sp-core",
- "sp-rpc",
- "sp-runtime",
- "sp-weights",
-]
-
-[[package]]
-name = "pallet-university-rpc-runtime-api"
-version = "0.1.0"
-dependencies = [
- "pallet-university",
- "parity-scale-codec",
- "sp-api",
- "sp-runtime",
- "sp-weights",
 ]
 
 [[package]]

@@ -562,7 +562,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl pallet_university_rpc_runtime_api::PalletUniversityApi<Block> for Runtime {
+	impl chain_rpc_runtime_api::university::PalletUniversityApi<Block> for Runtime {
 		fn something() {
 		}
 	}
