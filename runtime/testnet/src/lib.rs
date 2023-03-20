@@ -53,6 +53,7 @@ pub use pallet_scholarship;
 pub use pallet_student;
 pub use pallet_university;
 pub use traits;
+use traits::pallet_provider::UniversityProvider;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -558,6 +559,11 @@ impl_runtime_apis! {
 			len: u32,
 		) -> pallet_transaction_payment::FeeDetails<Balance> {
 			TransactionPayment::query_call_fee_details(call, len)
+		}
+	}
+
+	impl pallet_university_rpc_runtime_api::PalletUniversityApi<Block> for Runtime {
+		fn something() {
 		}
 	}
 

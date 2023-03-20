@@ -42,6 +42,7 @@ sp-version = { version = "5.0.0", default-features = false, git = "https://githu
 # Used for the node template's RPCs
 frame-system-rpc-runtime-api = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.32" }
 pallet-transaction-payment-rpc-runtime-api = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.32" }
+pallet-university-rpc-runtime-api = { default-features = false, path = "../../pallets/university/rpc/runtime-api" }
 
 # Used for runtime benchmarking
 frame-benchmarking = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", optional = true , branch = "polkadot-v0.9.32" }
@@ -66,11 +67,11 @@ std = [
 	"pallet-university/std",
 	"pallet-professor/std",
 	"pallet-student/std",
-  "pallet-lecture/std",
-  "pallet-exam/std",
-  "pallet-scholarship/std",
+  	"pallet-lecture/std",
+  	"pallet-exam/std",
+  	"pallet-scholarship/std",
 	"pallet-checked-validation/std",
-  "traits/std",
+  	"traits/std",
 
 	"frame-try-runtime?/std",
 	"frame-system-benchmarking?/std",
@@ -89,6 +90,7 @@ std = [
 	"pallet-sudo/std",
 	"pallet-timestamp/std",
 	"pallet-transaction-payment-rpc-runtime-api/std",
+	"pallet-university-rpc-runtime-api/std",
 	"pallet-transaction-payment/std",
 	"sp-api/std",
 	"sp-block-builder/std",
@@ -106,9 +108,9 @@ runtime-benchmarks = [
 	"pallet-university/runtime-benchmarks",
 	"pallet-professor/runtime-benchmarks",
 	"pallet-student/runtime-benchmarks",
-  "pallet-lecture/runtime-benchmarks",
-  "pallet-exam/runtime-benchmarks",
-  "pallet-scholarship/runtime-benchmarks",
+	"pallet-lecture/runtime-benchmarks",
+	"pallet-exam/runtime-benchmarks",
+	"pallet-scholarship/runtime-benchmarks",
 	"pallet-checked-validation/runtime-benchmarks",
 
 	"frame-benchmarking/runtime-benchmarks",
@@ -124,9 +126,9 @@ try-runtime = [
 	"pallet-university/try-runtime",
 	"pallet-professor/try-runtime",
 	"pallet-student/try-runtime",
-  "pallet-lecture/try-runtime",
-  "pallet-lecture/try-runtime",
-  "pallet-scholarship/try-runtime",
+	"pallet-lecture/try-runtime",
+	"pallet-lecture/try-runtime",
+	"pallet-scholarship/try-runtime",
 	"pallet-checked-validation/try-runtime",
 
 	"frame-try-runtime",

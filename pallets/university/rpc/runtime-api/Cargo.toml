@@ -1,0 +1,21 @@
+[package]
+name = "pallet-university-rpc-runtime-api"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+codec = { package = "parity-scale-codec", version = "3.2.2", default-features = false, features = ["derive"] }
+pallet-university = { version = "4.0.0-dev", default-features = false, path = "../../../university" }
+sp-api = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.32" }
+sp-runtime = { version = "6.0.0", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.32" }
+sp-weights = { version = "4.0.0", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.32" }
+
+[features]
+default = ["std"]
+std = [
+	"codec/std",
+	"pallet-university/std",
+	"sp-api/std",
+	"sp-runtime/std",
+	"sp-weights/std",
+]
