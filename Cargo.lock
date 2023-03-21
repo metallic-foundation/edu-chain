@@ -711,36 +711,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "chain-rpc"
-version = "0.1.0"
-dependencies = [
- "chain-rpc-runtime-api",
- "jsonrpsee",
- "parity-scale-codec",
- "sp-api",
- "sp-blockchain",
- "sp-core",
- "sp-rpc",
- "sp-runtime",
- "sp-weights",
- "types",
-]
-
-[[package]]
-name = "chain-rpc-runtime-api"
-version = "0.1.0"
-dependencies = [
- "frame-support",
- "pallet-university",
- "parity-scale-codec",
- "sp-api",
- "sp-runtime",
- "sp-std",
- "sp-weights",
- "types",
-]
-
-[[package]]
 name = "chrono"
 version = "0.4.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1457,7 +1427,6 @@ version = "4.0.0-dev"
 name = "educhain-testnet-runtime"
 version = "4.0.0-dev"
 dependencies = [
- "chain-rpc-runtime-api",
  "frame-benchmarking",
  "frame-executive",
  "frame-support",
@@ -3746,7 +3715,6 @@ dependencies = [
 name = "node-template"
 version = "4.0.0-dev"
 dependencies = [
- "chain-rpc",
  "clap",
  "educhain-development-runtime",
  "educhain-mainnet-runtime",

@@ -562,16 +562,6 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl chain_rpc_runtime_api::university::PalletUniversityApi<Block> for Runtime {
-		fn universities_keys() -> Vec<pallet_university::university::UniversityId> {
-			pallet_university::Universities::<Runtime>::iter_keys().collect()
-		}
-
-		fn university_by_id(id: pallet_university::university::UniversityId) -> Option<pallet_university::university::University<AccountId>> {
-			University::get_university(id)
-		}
-	}
-
 	#[cfg(feature = "runtime-benchmarks")]
 	impl frame_benchmarking::Benchmark<Block> for Runtime {
 		fn benchmark_metadata(extra: bool) -> (
