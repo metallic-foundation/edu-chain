@@ -15,7 +15,7 @@ pub struct NewUniversityParam<AccountId> {
 
 /// information stored of a university
 #[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug, MaxEncodedLen)]
-pub struct Universiy<AccountId> {
+pub struct University<AccountId> {
 	/// who own the right to modify this university
 	//
 	// this will most probably be the multi-signature AccountId

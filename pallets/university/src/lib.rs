@@ -15,7 +15,7 @@ pub mod pallet {
 		university::*,
 	};
 
-	type UniversityFor<T> = Universiy<AccountIdOf<T>>;
+	type UniversityFor<T> = University<AccountIdOf<T>>;
 	type NewUniversityParamFor<T> = NewUniversityParam<AccountIdOf<T>>;
 
 	#[pallet::pallet]

@@ -567,7 +567,7 @@ impl_runtime_apis! {
 			pallet_university::Universities::<Runtime>::iter_keys().collect()
 		}
 
-		fn university_by_id(id: pallet_university::university::UniversityId) -> Option<pallet_university::university::University> {
+		fn university_by_id(id: pallet_university::university::UniversityId) -> Option<pallet_university::university::University<AccountId>> {
 			University::get_university(id)
 		}
 	}
