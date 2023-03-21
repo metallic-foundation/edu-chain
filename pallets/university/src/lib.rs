@@ -9,11 +9,14 @@ pub mod pallet {
 	use traits::pallet_provider as pallet_provider_traits;
 	pub use types::university;
 	use types::{
-		primitives::IpfsLink,
+		primitives::{AccountIdOf, IpfsLink},
 		professor::{NewProfessorParam, ProfessorId},
 		student::StudentId,
 		university::*,
 	};
+
+	type UniversityFor<T> = Universiy<AccountIdOf<T>>;
+	type NewUniversityParamFor<T> = NewUniversityParam<AccountIdOf<T>>;
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
@@ -32,14 +35,22 @@ pub mod pallet {
 
 	#[pallet::storage]
 	#[pallet::getter(fn get_university)]
-	pub type Universities<T> = StorageMap<_, Twox64Concat, UniversityId, University, OptionQuery>;
+	pub type Universities<T> =
+		StorageMap<_, Twox64Concat, UniversityId, UniversityFor<T>, OptionQuery>;
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {}
 
 	#[pallet::error]
-	pub enum Error<T> {}
+	pub enum Error<T> {
+		/// Origin cannot perform this action
+		InsufficientPermission,
+		/// No university with given id exists
+		NoUniversity,
+		/// University with this id already exists
+		UniversityExists,
+	}
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
@@ -47,7 +58,7 @@ pub mod pallet {
 		pub fn register_university(
 			origin: OriginFor<T>,
 			university_id: UniversityId,
-			info: NewUniversityParam,
+			info: NewUniversityParamFor<T>,
 		) -> DispatchResult {
 			// regitser this university with given info
 			// info might be something like:
@@ -55,6 +66,16 @@ pub mod pallet {
 			//      permanent: Hash(IpfsLink),
 			//
 			//  }
+
+			let signer = ensure_signed(origin)?;
+			Self::verify_new_id(&university_id)?;
+
+			let NewUniversityParam { admin, permanent_info } = info;
+			let admin = admin.unwrap_or(signer);
+
+			let university = UniversityFor::<T> { admin, permanent_info };
+
+			<Universities<T>>::insert(university_id, university);
 
 			Ok(())
 		}
@@ -81,6 +102,8 @@ pub mod pallet {
 			// UniversityProfessors: [university_id, professor_id] -> faculty_info / other info
 			// also in ProfessorProvider it makes sense to have another storage synced to this
 			// Professors: [professor_id] -> Info { university: vec![university_id] }
+
+			Self::ensure_university_admin(origin, &university_id)?;
 
 			Ok(())
 		}
@@ -112,6 +135,26 @@ pub mod pallet {
 			// approve it and then pass these details to make a certofocate accorsing to the
 			// university design
 
+			Ok(())
+		}
+	}
+
+	impl<T: Config> Pallet<T> {
+		pub fn verify_new_id(university_id: &UniversityId) -> DispatchResult {
+			ensure!(!Universities::<T>::contains_key(university_id), Error::<T>::UniversityExists,);
+			Ok(())
+		}
+
+		pub fn ensure_university_admin(
+			origin: OriginFor<T>,
+			university_id: &UniversityId,
+		) -> DispatchResult {
+			ensure!(
+				Self::get_university(university_id)
+					.map(|info| ensure_signed(origin).map(|signer| signer == info.admin))
+					.ok_or(Error::<T>::NoUniversity)??,
+				Error::<T>::InsufficientPermission
+			);
 			Ok(())
 		}
 	}

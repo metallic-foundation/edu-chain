@@ -35,7 +35,7 @@ impl<Bound> Scaler<Bound> {
 pub struct UniqId {}
 
 /// Structure to represent the IPFS link
-#[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, Clone)]
+#[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, Clone, MaxEncodedLen)]
 pub struct IpfsLink {}
 
 // common types alias
