@@ -1,16 +1,17 @@
 use std::sync::Arc;
 
 use jsonrpsee::{core::RpcResult, proc_macros::rpc};
-use sp_api::ProvideRuntimeApi;
+use sp_api::{BlockId, ProvideRuntimeApi};
 use sp_blockchain::HeaderBackend;
 use sp_runtime::traits::Block as BlockT;
+use types::university::*;
 
 pub use chain_rpc_runtime_api::university::PalletUniversityApi as UniversityRuntimeApi;
 
 #[rpc(client, server)]
 pub trait UniversityApi<BlockHash> {
-	#[method(name = "university_is_verified")]
-	fn university_is_verified(&self) -> RpcResult<()>;
+	#[method(name = "university_get_all_id")]
+	fn all_university_id(&self, at: Option<BlockHash>) -> RpcResult<Vec<UniversityId>>;
 }
 
 pub struct University<C, P> {
@@ -32,9 +33,11 @@ where
 	C: ProvideRuntimeApi<Block> + HeaderBackend<Block> + Send + Sync + 'static,
 	C::Api: UniversityRuntimeApi<Block>,
 {
-	fn university_is_verified(&self) -> RpcResult<()> {
+	fn all_university_id(&self, at: Option<Block::Hash>) -> RpcResult<Vec<UniversityId>> {
+		let block_id = BlockId::Hash(at.unwrap_or_else(|| self.client.info().best_hash));
 		let api = self.client.runtime_api();
+		let all_id = api.universities_keys(&block_id).unwrap();
 
-		Ok(())
+		Ok(all_id)
 	}
 }

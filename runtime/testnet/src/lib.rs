@@ -563,7 +563,12 @@ impl_runtime_apis! {
 	}
 
 	impl chain_rpc_runtime_api::university::PalletUniversityApi<Block> for Runtime {
-		fn something() {
+		fn universities_keys() -> Vec<pallet_university::university::UniversityId> {
+			pallet_university::Universities::<Runtime>::iter_keys().collect()
+		}
+
+		fn university_by_id(id: pallet_university::university::UniversityId) -> Option<pallet_university::university::University> {
+			University::get_university(id)
 		}
 	}
 

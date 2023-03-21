@@ -7,6 +7,7 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 	use traits::pallet_provider as pallet_provider_traits;
+	pub use types::university;
 	use types::{
 		primitives::IpfsLink,
 		professor::{NewProfessorParam, ProfessorId},
@@ -30,8 +31,8 @@ pub mod pallet {
 	}
 
 	#[pallet::storage]
-	#[pallet::getter(fn something)]
-	pub type Something<T> = StorageValue<_, u32>;
+	#[pallet::getter(fn get_university)]
+	pub type Universities<T> = StorageMap<_, Twox64Concat, UniversityId, University, OptionQuery>;
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]

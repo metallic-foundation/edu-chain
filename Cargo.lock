@@ -723,17 +723,21 @@ dependencies = [
  "sp-rpc",
  "sp-runtime",
  "sp-weights",
+ "types",
 ]
 
 [[package]]
 name = "chain-rpc-runtime-api"
 version = "0.1.0"
 dependencies = [
+ "frame-support",
  "pallet-university",
  "parity-scale-codec",
  "sp-api",
  "sp-runtime",
+ "sp-std",
  "sp-weights",
+ "types",
 ]
 
 [[package]]
@@ -7935,6 +7939,7 @@ dependencies = [
  "frame-system",
  "parity-scale-codec",
  "scale-info",
+ "serde",
  "sp-std",
 ]
 

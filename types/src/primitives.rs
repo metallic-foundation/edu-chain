@@ -1,6 +1,9 @@
-use codec::{Decode, Encode};
+use codec::{Decode, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
 use sp_std::fmt::Debug;
+
+#[cfg(feature = "std")]
+use serde::{Deserialize, Serialize};
 
 #[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug)]
 pub enum Scaler<Bound> {
@@ -27,7 +30,8 @@ impl<Bound> Scaler<Bound> {
 
 /// type to uniquely represent any item
 /// this better to be a had bytes
-#[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, Clone)]
+#[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, Clone, MaxEncodedLen)]
+#[cfg_attr(feature = "std", derive(Deserialize, Serialize))]
 pub struct UniqId {}
 
 /// Structure to represent the IPFS link
