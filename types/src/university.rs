@@ -5,7 +5,7 @@ use codec::{Decode, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
 use sp_std::fmt::Debug;
 
-use crate::primitives::IpfsLink;
+use crate::primitives::StdIpfsLink as IpfsLink;
 
 #[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug)]
 pub struct NewUniversityParam<AccountId> {
