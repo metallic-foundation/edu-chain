@@ -7,14 +7,14 @@ use sp_std::fmt::Debug;
 
 use crate::primitives::StdIpfsLink as IpfsLink;
 
-#[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug)]
+#[derive(Decode, Encode, TypeInfo, Clone, Debug, Eq, PartialEq)]
 pub struct NewUniversityParam<AccountId> {
 	pub admin: Option<AccountId>,
 	pub permanent_info: IpfsLink,
 }
 
 /// information stored of a university
-#[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug, MaxEncodedLen)]
+#[derive(Decode, Encode, TypeInfo, Clone, MaxEncodedLen, Debug, PartialEq, Eq)]
 pub struct University<AccountId> {
 	/// who own the right to modify this university
 	//

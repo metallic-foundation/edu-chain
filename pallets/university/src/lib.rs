@@ -9,7 +9,7 @@ pub mod pallet {
 	use traits::pallet_provider as pallet_provider_traits;
 	pub use types::university;
 	use types::{
-		primitives::{AccountIdOf, IpfsLink},
+		primitives::{AccountIdOf, StdIpfsLink as IpfsLink},
 		professor::{NewProfessorParam, ProfessorId},
 		student::StudentId,
 		university::*,

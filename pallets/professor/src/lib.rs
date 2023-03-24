@@ -7,7 +7,7 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 	use traits::pallet_provider as pallet_provider_traits;
-	use types::{primitives::IpfsLink, professor::*, university::UniversityId};
+	use types::{primitives::StdIpfsLink as IpfsLink, professor::*, university::UniversityId};
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]

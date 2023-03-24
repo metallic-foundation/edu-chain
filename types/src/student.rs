@@ -6,7 +6,7 @@ use scale_info::TypeInfo;
 use sp_std::fmt::Debug;
 
 /// parameter required to register as student
-#[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug)]
+#[derive(Decode, Encode, TypeInfo, Clone, Debug, PartialEq, Eq)]
 pub struct NewStudentParam {}
 
 /// information stored of a student

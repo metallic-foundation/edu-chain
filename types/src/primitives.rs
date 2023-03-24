@@ -1,5 +1,8 @@
 use codec::{Decode, Encode, MaxEncodedLen};
-use frame_support::{BoundedVec, traits::{Get, ConstU32}};
+use frame_support::{
+	traits::{ConstU32, Get},
+	BoundedVec,
+};
 use scale_info::TypeInfo;
 use sp_std::fmt::Debug;
 
@@ -38,39 +41,56 @@ impl<Bound> Scaler<Bound> {
 pub struct UniqId {}
 
 /// Structure to represent the IPFS link
-#[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, Clone, MaxEncodedLen)]
-pub struct IpfsLink<S>(BoundedVec<u8, S>);
+#[derive(Decode, Encode, TypeInfo, Clone, MaxEncodedLen, Debug)]
+pub struct IpfsLink<S: Debug + Get<u32>>(BoundedVec<u8, S>);
 
-#[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, Clone, MaxEncodedLen)]
-struct IpfsLinkLength;
-impl<T: From<u32>> Get<T> for IpfsLinkLength {
-    fn get() -> T {
-        IPFS_LINK_LENGTH.into()
-    }
+impl<S: Get<u32> + Debug> Eq for IpfsLink<S> {}
+impl<S> PartialEq for IpfsLink<S>
+where
+	S: Get<u32> + Debug,
+{
+	fn eq(&self, other: &Self) -> bool {
+		if self.0.len() == other.0.len() {
+			for at in 0_usize..S::get().try_into().expect("usize is smaller than u32") {
+				if self.0[at] != other.0[at] {
+					return false
+				}
+			}
+			true
+		} else {
+			false
+		}
+	}
 }
 
-impl<S> IpfsLink<S> {
-    pub fn new(bytes: BoundedVec<u8, S>) -> Self {
-        Self(bytes.into())
-    }
+#[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, Clone, MaxEncodedLen)]
+pub struct IpfsLinkLength;
+impl<T: From<u32>> Get<T> for IpfsLinkLength {
+	fn get() -> T {
+		IPFS_LINK_LENGTH.into()
+	}
+}
 
-    pub fn get(&self) -> &BoundedVec<u8, S> {
-        &self.0
-    }
+impl<S: Debug + Get<u32>> IpfsLink<S> {
+	pub fn new(bytes: BoundedVec<u8, S>) -> Self {
+		Self(bytes)
+	}
 
-    pub fn inner(self) -> BoundedVec<u8, S> {
-        self.0
-    }
+	pub fn get(&self) -> &BoundedVec<u8, S> {
+		&self.0
+	}
 
-    pub fn get_mut(&mut self) -> &mut BoundedVec<u8, S> {
-        &mut self.0
-    }
+	pub fn inner(self) -> BoundedVec<u8, S> {
+		self.0
+	}
 
-    pub fn set(&mut self, bytes: BoundedVec<u8, S>) -> BoundedVec<u8, S> {
-        let previous = self.0;
-        self.0 = bytes.into();
-        previous
-    }
+	pub fn get_mut(&mut self) -> &mut BoundedVec<u8, S> {
+		&mut self.0
+	}
+
+	pub fn set(&mut self, bytes: BoundedVec<u8, S>) {
+		self.0 = bytes
+	}
 }
 
 // common types alias
