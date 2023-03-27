@@ -3,11 +3,17 @@ pub trait StudentProvider {
 }
 
 pub trait UniversityProvider {
-	fn get_university_info();
+	type UniversityId;
+	type UniversityInfo;
+
+	fn university_info(university_id: &Self::UniversityId) -> Option<Self::UniversityInfo>;
 }
 
 pub trait ProfessorProvider {
-	fn get_staff_info();
+	type ProfessorId; // types::professor::ProfessorIdDef;
+	type ProfessorInfo;
+
+	fn professor_info(professor_id: &Self::ProfessorId) -> Option<Self::ProfessorInfo>;
 }
 
 pub trait LectureProvider {

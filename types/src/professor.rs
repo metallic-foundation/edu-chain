@@ -1,6 +1,9 @@
 /// Identifier type to uniquely represent a professor
 pub type ProfessorId = crate::primitives::UniqId;
 
+pub trait ProfessorIdDef: Clone + Decode + Encode + MaxEncodedLen + TypeInfo + Debug + Eq {}
+impl ProfessorIdDef for ProfessorId {}
+
 use codec::{Decode, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
 use sp_std::fmt::Debug;

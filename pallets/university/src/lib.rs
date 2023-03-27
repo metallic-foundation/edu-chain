@@ -6,17 +6,17 @@ pub use pallet::*;
 pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
-	use traits::pallet_provider as pallet_provider_traits;
-	pub use types::university;
-	use types::{
+	pub(super) use traits::pallet_provider as pallet_provider_traits;
+	pub(super) use types::{
 		primitives::{AccountIdOf, StdIpfsLink as IpfsLink},
 		professor::{NewProfessorParam, ProfessorId},
 		student::StudentId,
 		university::*,
 	};
 
-	type UniversityFor<T> = University<AccountIdOf<T>>;
+	pub(super) type UniversityInfoFor<T> = University<AccountIdOf<T>>;
 	type NewUniversityParamFor<T> = NewUniversityParam<AccountIdOf<T>>;
+	type ProfessorIdFor<T> = <<T as Config>::ProfessorProvider as pallet_provider_traits::ProfessorProvider>::ProfessorId;
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
@@ -26,7 +26,7 @@ pub mod pallet {
 	pub trait Config: frame_system::Config {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 
-		type ProfessorProvider: pallet_provider_traits::ProfessorProvider;
+		type ProfessorProvider: pallet_provider_traits::ProfessorProvider<ProfessorId = ProfessorId>;
 		type StudentProvider: pallet_provider_traits::StudentProvider;
 		type LectureProvider: pallet_provider_traits::LectureProvider;
 		type ExamProvider: pallet_provider_traits::ExamProvider;
@@ -36,7 +36,7 @@ pub mod pallet {
 	#[pallet::storage]
 	#[pallet::getter(fn get_university)]
 	pub type Universities<T> =
-		StorageMap<_, Twox64Concat, UniversityId, UniversityFor<T>, OptionQuery>;
+		StorageMap<_, Twox64Concat, UniversityId, UniversityInfoFor<T>, OptionQuery>;
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
@@ -50,6 +50,8 @@ pub mod pallet {
 		NoUniversity,
 		/// University with this id already exists
 		UniversityExists,
+		/// Professor does not exists
+		NoProfessor,
 	}
 
 	#[pallet::call]
@@ -73,7 +75,7 @@ pub mod pallet {
 			let NewUniversityParam { admin, permanent_info } = info;
 			let admin = admin.unwrap_or(signer);
 
-			let university = UniversityFor::<T> { admin, permanent_info };
+			let university = UniversityInfoFor::<T> { admin, permanent_info };
 
 			<Universities<T>>::insert(university_id, university);
 
@@ -84,7 +86,7 @@ pub mod pallet {
 		pub fn add_professor(
 			origin: OriginFor<T>,
 			university_id: UniversityId,
-			professor_id: ProfessorId,
+			professor_id: ProfessorIdFor<T>,
 			info: NewProfessorParam,
 		) -> DispatchResult {
 			// sign a contract by university to add the already registered professor to this
@@ -104,6 +106,8 @@ pub mod pallet {
 			// Professors: [professor_id] -> Info { university: vec![university_id] }
 
 			Self::ensure_university_admin(origin, &university_id)?;
+			<<T as Config>::ProfessorProvider as pallet_provider_traits::ProfessorProvider>
+                ::professor_info(&professor_id).ok_or(Error::<T>::NoProfessor)?;
 
 			Ok(())
 		}
@@ -160,8 +164,11 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> traits::pallet_provider::UniversityProvider for Pallet<T> {
-	fn get_university_info() {
-		todo!()
+impl<T: Config> pallet_provider_traits::UniversityProvider for Pallet<T> {
+	type UniversityId = crate::UniversityId;
+	type UniversityInfo = crate::UniversityInfoFor<T>;
+
+	fn university_info(university_id: &Self::UniversityId) -> Option<Self::UniversityInfo> {
+		crate::Pallet::<T>::get_university(university_id)
 	}
 }
