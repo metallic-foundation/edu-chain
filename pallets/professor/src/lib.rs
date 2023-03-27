@@ -7,7 +7,14 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 	use traits::pallet_provider as pallet_provider_traits;
-	use types::{primitives::StdIpfsLink as IpfsLink, professor::*, university::UniversityId};
+	use types::{
+		primitives::{AccountIdOf, StdIpfsLink as IpfsLink},
+		professor::*,
+		university::UniversityId,
+	};
+
+	type NewProfessorParamFor = NewProfessorParam;
+	type ProfessorInfoFor<T> = ProfessorInfo<AccountIdOf<T>>;
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
@@ -23,14 +30,20 @@ pub mod pallet {
 
 	#[pallet::storage]
 	#[pallet::getter(fn something)]
-	pub type Something<T> = StorageValue<_, u32>;
+	pub type Professors<T> = StorageMap<_, Twox64Concat, ProfessorId, ProfessorInfoFor<T>>;
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
-	pub enum Event<T: Config> {}
+	pub enum Event<T: Config> {
+		/// New professor have been registered under `ProfessorId`
+		NewProfessor(ProfessorId),
+	}
 
 	#[pallet::error]
-	pub enum Error<T> {}
+	pub enum Error<T> {
+		/// Origin cannot perform this action
+		InsufficientPermission,
+	}
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
@@ -38,13 +51,20 @@ pub mod pallet {
 		pub fn register_as_professor(
 			origin: OriginFor<T>,
 			professor_id: ProfessorId,
-			info: (),
-			identitiy: IpfsLink,
+			info: NewProfessorParamFor,
 		) -> DispatchResult {
 			// register this user as professor under professor_id
 			// identity is the permanent identity of this user which will be hash of ipfs link
 			// info is changable informarmation about professor ( eg: which university is he
 			// associated to )
+			let professor =
+				ensure_signed(origin).map_err(|_| Error::<T>::InsufficientPermission)?;
+
+			let NewProfessorParam { info } = info;
+			let professor_info = ProfessorInfoFor::<T> { info, professor };
+
+			<Professors<T>>::insert(professor_id.clone(), professor_info);
+			Self::deposit_event(Event::<T>::NewProfessor(professor_id));
 
 			Ok(())
 		}
