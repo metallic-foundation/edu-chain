@@ -40,8 +40,7 @@ pub mod pallet {
 
 	#[pallet::storage]
 	#[pallet::getter(fn get_offer)]
-	pub type Offers<T> =
-		StorageDoubleMap<_, Twox64Concat, ProfessorId, Twox64Concat, UniversityId, OfferInfo>;
+	pub type Offers<T> = StorageMap<_, Twox64Concat, ProfessorId, OfferInfo>;
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
@@ -49,9 +48,9 @@ pub mod pallet {
 		/// New professor have been registered under `ProfessorId`
 		NewProfessor(ProfessorId),
 		/// A new offer have been made
-		OfferMade { university_id: UniversityId, professor_id: ProfessorId },
+		OfferMade(OfferId),
 		/// Offer have been accepted
-		OfferAccepted { university_id: UniversityId, professor_id: ProfessorId },
+		OfferAccepted(OfferId),
 	}
 
 	#[pallet::error]
@@ -93,12 +92,11 @@ pub mod pallet {
 		#[pallet::weight(10_000)]
 		pub fn make_offer_for_uni(
 			origin: OriginFor<T>,
-			university_id: UniversityId,
-			professor_id: ProfessorId,
+			offer_id: OfferId,
 			offer: OfferInfo,
 		) -> DispatchResult {
 			let signer = ensure_signed(origin).map_err(|_| Error::<T>::InsufficientPermission)?;
-			let university = T::UniversityProvider::university_info(&university_id)
+			let university = T::UniversityProvider::university_info(&offer.university)
 				.ok_or(Error::<T>::NoUniversity)?;
 			ensure!(signer == university.admin, Error::<T>::InsufficientPermission);
 
@@ -108,18 +106,14 @@ pub mod pallet {
 			// - limit of offer to make by professor
 			// - if professor is open to work
 
-			Offers::<T>::insert(&professor_id, &university_id, offer);
-			Self::deposit_event(Event::<T>::OfferMade { university_id, professor_id });
+			Offers::<T>::insert(&offer_id, offer);
+			Self::deposit_event(Event::<T>::OfferMade(offer_id));
 
 			Ok(())
 		}
 
 		#[pallet::weight(10_000)]
-		pub fn accept_offer(
-			origin: OriginFor<T>,
-			professor_id: ProfessorId,
-			university_id: UniversityId,
-		) -> DispatchResult {
+		pub fn accept_offer(origin: OriginFor<T>, offer_id: OfferId) -> DispatchResult {
 			// Once university calls university::add_staff
 			// the staff will be temporary located in a storage
 			// before that storage explires, respective staff ought to call this to approve the
@@ -131,16 +125,18 @@ pub mod pallet {
 			// without needing to iterate all university ( which will be impractical )
 
 			let signer = ensure_signed(origin)?;
-			let professor = Self::get_professor(&professor_id).ok_or(Error::<T>::NoProfessor)?;
+			let offer_info = Self::get_offer(&offer_id).ok_or(Error::<T>::NoOffer)?;
+			let professor =
+				Self::get_professor(&offer_info.professor).ok_or(Error::<T>::NoProfessor)?;
 			ensure!(signer == professor.professor, Error::<T>::InsufficientPermission);
 
-			ensure!(Offers::<T>::contains_key(&professor_id, &university_id), Error::<T>::NoOffer);
+			ensure!(Offers::<T>::contains_key(&offer_id), Error::<T>::NoOffer);
 			// TODO:
 			// do something to signify the acceptance of offer.
 			// example: adding the professor to university, assigning classes etc.
-			Offers::<T>::remove(&professor_id, &university_id);
+			Offers::<T>::remove(&offer_id);
 
-			Self::deposit_event(Event::<T>::OfferAccepted { professor_id, university_id });
+			Self::deposit_event(Event::<T>::OfferAccepted(offer_id));
 
 			Ok(())
 		}

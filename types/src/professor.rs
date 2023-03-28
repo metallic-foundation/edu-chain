@@ -1,6 +1,9 @@
 /// Identifier type to uniquely represent a professor
 pub type ProfessorId = crate::primitives::UniqId;
 
+/// Identifier type to uniquely represent a offer made
+pub type OfferId = crate::primitives::UniqId;
+
 pub trait ProfessorIdDef: Clone + Decode + Encode + MaxEncodedLen + TypeInfo + Debug + Eq {}
 impl ProfessorIdDef for ProfessorId {}
 
@@ -26,5 +29,7 @@ pub struct ProfessorInfo<AccountId> {
 /// Offer Info
 #[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug, MaxEncodedLen)]
 pub struct OfferInfo {
+	pub professor: ProfessorId,
+	pub university: crate::university::UniversityId,
 	pub contract_file: StdIpfsLink,
 }

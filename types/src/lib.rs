@@ -8,4 +8,4 @@ pub mod scholarship;
 pub mod student;
 pub mod university;
 
-pub use primitives::{AccountIdOf, BlockNumberOf};
+pub use primitives::*;
