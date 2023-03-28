@@ -4,7 +4,7 @@ pub use pallet::*;
 
 #[frame_support::pallet]
 pub mod pallet {
-	use frame_support::pallet_prelude::*;
+	use frame_support::{pallet_prelude::*, Twox64Concat};
 	use frame_system::pallet_prelude::*;
 	use traits::pallet_provider as pallet_provider_traits;
 	use types::{primitives::StdIpfsLink as IpfsLink, student::*, university::UniversityId};
@@ -23,29 +23,36 @@ pub mod pallet {
 
 	#[pallet::storage]
 	#[pallet::getter(fn something)]
-	pub type Something<T> = StorageValue<_, u32>;
+	pub type Applications<T> = StorageMap<_, Twox64Concat, ApplicationId, ApplicationInfoFor<T>>;
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
-		SomethingStored { something: u32, who: T::AccountId },
+		ApplicationSubmitted(ApplicationId),
 	}
 
 	#[pallet::error]
-	pub enum Error<T> {}
+	pub enum Error<T> {
+		InsufficientPermission,
+	}
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
 		#[pallet::weight(10_000)]
-		pub fn send_application(
+		pub fn send_enrollment_application(
 			origin: OriginFor<T>,
-			university_id: UniversityId,
-			application_id: (),
-			student_info: (),
-			course_id: (),
+			application_id: ApplicationId,
+			application_info: NewApplicationParam,
 		) -> DispatchResult {
 			// send application to get admission in university
-			//
+			let applicant =
+				ensure_signed(origin).map_err(|_| Error::<T>::InsufficientPermission)?;
+
+			let NewApplicationParam { university, application } = application_info;
+			let application_info = ApplicationInfoFor::<T> { university, applicant, application };
+
+			Applications::<T>::insert(&application_id, application_info);
+			Self::deposit_event(Event::<T>::ApplicationSubmitted(application_id));
 
 			Ok(())
 		}

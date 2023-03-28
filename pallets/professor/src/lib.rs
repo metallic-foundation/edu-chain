@@ -42,15 +42,15 @@ pub mod pallet {
 	/// and later he deregistered himself
 	/// but we cannot allow this id to be taken again by anyone ( not even the same accountId of
 	/// previous professor )
-	/// 
+	///
 	/// - reason: example: there might be offer made to professorIdOne but he
 	/// deregister then if someone else register as professorIdOne then he can own the offer
 	/// but this is not something intentional
-	/// 
+	///
 	/// another solution would have been to remove all data of this ProfessorId while deregistering
 	/// but this is always not possible as ProfessorId might not always be the key to any storage
 	/// and iteration over every value in search of this professorId would not make much sense
-	/// 
+	///
 	/// another solution would be to use the same Professors<T>
 	/// but while de-regestering instead of removing put the professor in wiped state
 	/// but it would be more storage-wise cheaper to have just a map in new storage
@@ -184,7 +184,10 @@ pub mod pallet {
 	impl<T: Config> Pallet<T> {
 		fn ensure_professor_id_is_unique(professor_id: &ProfessorId) -> DispatchResult {
 			ensure!(!Professors::<T>::contains_key(professor_id), Error::<T>::ProfessorExists);
-			ensure!(!UnusableProfessorId::<T>::contains_key(professor_id), Error::<T>::ProfessorExists);
+			ensure!(
+				!UnusableProfessorId::<T>::contains_key(professor_id),
+				Error::<T>::ProfessorExists
+			);
 			Ok(())
 		}
 	}
