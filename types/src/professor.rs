@@ -22,3 +22,9 @@ pub struct ProfessorInfo<AccountId> {
 	pub professor: AccountId,
 	pub info: StdIpfsLink,
 }
+
+/// Offer Info
+#[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug, MaxEncodedLen)]
+pub struct OfferInfo {
+	pub contract_file: StdIpfsLink,
+}
