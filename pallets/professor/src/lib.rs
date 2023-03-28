@@ -4,11 +4,10 @@ pub use pallet::*;
 
 #[frame_support::pallet]
 pub mod pallet {
-	use frame_support::{pallet_prelude::*, BoundedVec, Twox64Concat};
+	use frame_support::{pallet_prelude::*, Twox64Concat};
 	use frame_system::pallet_prelude::*;
 	use pallet_provider_traits::*;
 	pub(super) use traits::pallet_provider as pallet_provider_traits;
-	use types::university::University;
 	pub(super) use types::{
 		primitives::{AccountIdOf, StdIpfsLink as IpfsLink},
 		professor::*,
@@ -38,6 +37,26 @@ pub mod pallet {
 	#[pallet::getter(fn get_professor)]
 	pub type Professors<T> = StorageMap<_, Twox64Concat, ProfessorId, ProfessorInfoFor<T>>;
 
+	/// These are previouslt used professor's Id
+	/// i.e some professor was registered with this ID
+	/// and later he deregistered himself
+	/// but we cannot allow this id to be taken again by anyone ( not even the same accountId of
+	/// previous professor )
+	/// 
+	/// - reason: example: there might be offer made to professorIdOne but he
+	/// deregister then if someone else register as professorIdOne then he can own the offer
+	/// but this is not something intentional
+	/// 
+	/// another solution would have been to remove all data of this ProfessorId while deregistering
+	/// but this is always not possible as ProfessorId might not always be the key to any storage
+	/// and iteration over every value in search of this professorId would not make much sense
+	/// 
+	/// another solution would be to use the same Professors<T>
+	/// but while de-regestering instead of removing put the professor in wiped state
+	/// but it would be more storage-wise cheaper to have just a map in new storage
+	#[pallet::storage]
+	pub type UnusableProfessorId<T> = StorageMap<_, Identity, ProfessorId, ()>;
+
 	#[pallet::storage]
 	#[pallet::getter(fn get_offer)]
 	pub type Offers<T> = StorageMap<_, Twox64Concat, ProfessorId, OfferInfo>;
@@ -57,6 +76,8 @@ pub mod pallet {
 	pub enum Error<T> {
 		/// Origin cannot perform this action
 		InsufficientPermission,
+		///
+		ProfessorExists,
 		/// No such professor
 		NoProfessor,
 		/// NO such univeristy
@@ -79,6 +100,7 @@ pub mod pallet {
 			// associated to )
 			let professor =
 				ensure_signed(origin).map_err(|_| Error::<T>::InsufficientPermission)?;
+			Self::ensure_professor_id_is_unique(&professor_id)?;
 
 			let NewProfessorParam { info } = info;
 			let professor_info = ProfessorInfoFor::<T> { info, professor };
@@ -155,6 +177,14 @@ pub mod pallet {
 			// be about info is the external info of this thesis ( eg: submission due date, credit
 			// weight )
 
+			Ok(())
+		}
+	}
+
+	impl<T: Config> Pallet<T> {
+		fn ensure_professor_id_is_unique(professor_id: &ProfessorId) -> DispatchResult {
+			ensure!(!Professors::<T>::contains_key(professor_id), Error::<T>::ProfessorExists);
+			ensure!(!UnusableProfessorId::<T>::contains_key(professor_id), Error::<T>::ProfessorExists);
 			Ok(())
 		}
 	}
