@@ -7,5 +7,6 @@ pub mod professor;
 pub mod scholarship;
 pub mod student;
 pub mod university;
+pub mod validator;
 
 pub use primitives::*;

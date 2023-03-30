@@ -42,6 +42,7 @@ pub struct UniqId {}
 
 /// Structure to represent the IPFS link
 #[derive(Decode, Encode, TypeInfo, Clone, MaxEncodedLen, Debug)]
+#[cfg_attr(feature = "std", derive(Deserialize, Serialize))]
 pub struct IpfsLink<S: Debug + Get<u32>>(BoundedVec<u8, S>);
 
 impl<S: Get<u32> + Debug> Eq for IpfsLink<S> {}
@@ -64,6 +65,7 @@ where
 }
 
 #[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, Clone, MaxEncodedLen)]
+#[cfg_attr(feature = "std", derive(Deserialize, Serialize))]
 pub struct IpfsLinkLength;
 impl<T: From<u32>> Get<T> for IpfsLinkLength {
 	fn get() -> T {
