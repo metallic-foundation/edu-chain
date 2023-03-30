@@ -7777,6 +7777,7 @@ dependencies = [
 name = "traits"
 version = "0.1.0"
 dependencies = [
+ "frame-support",
  "types",
 ]
 

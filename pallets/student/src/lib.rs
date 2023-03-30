@@ -7,6 +7,7 @@ pub mod pallet {
 	use frame_support::{pallet_prelude::*, Twox64Concat};
 	use frame_system::pallet_prelude::*;
 	use traits::pallet_provider as pallet_provider_traits;
+	pub(super) use types::student::*;
 	use types::{primitives::StdIpfsLink as IpfsLink, student::*, university::UniversityId};
 
 	#[pallet::pallet]
@@ -22,7 +23,7 @@ pub mod pallet {
 	}
 
 	#[pallet::storage]
-	#[pallet::getter(fn something)]
+	#[pallet::getter(fn get_application)]
 	pub type Applications<T> = StorageMap<_, Twox64Concat, ApplicationId, ApplicationInfoFor<T>>;
 
 	#[pallet::event]
@@ -33,7 +34,10 @@ pub mod pallet {
 
 	#[pallet::error]
 	pub enum Error<T> {
+		// Cannot perform this action due to mismatched permission
 		InsufficientPermission,
+		/// No such enrollment application
+		NoApplication,
 	}
 
 	#[pallet::call]
@@ -98,7 +102,18 @@ pub mod pallet {
 }
 
 impl<T: Config> traits::pallet_provider::StudentProvider for Pallet<T> {
+	type ApplicationId = types::student::ApplicationId;
+	type ApplicationInfo = types::student::Application<types::AccountIdOf<T>>;
+	type StudentId = types::student::StudentId;
+
 	fn get_student_info() {
 		todo!()
+	}
+
+	fn application_info(
+		application_id: &Self::ApplicationId,
+	) -> Result<Self::ApplicationInfo, frame_support::pallet_prelude::DispatchError> {
+		crate::Pallet::<T>::get_application(application_id)
+			.ok_or(crate::Error::<T>::NoApplication.into())
 	}
 }

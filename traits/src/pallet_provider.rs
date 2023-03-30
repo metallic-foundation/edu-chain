@@ -1,5 +1,14 @@
+use frame_support::pallet_prelude::*;
+
 pub trait StudentProvider {
+	type StudentId;
+	type ApplicationId;
+	type ApplicationInfo;
+
 	fn get_student_info();
+	fn application_info(
+		application_id: &Self::ApplicationId,
+	) -> Result<Self::ApplicationInfo, DispatchError>;
 }
 
 pub trait UniversityProvider {
