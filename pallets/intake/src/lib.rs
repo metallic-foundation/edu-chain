@@ -22,15 +22,19 @@ pub mod pallet {
 		type ProfessorProvider: pallet_provider_traits::ProfessorProvider;
 		type UniversityProvider: pallet_provider_traits::UniversityProvider<
 			UniversityId = types::university::UniversityId,
-            FrameConfig = Self,
+			FrameConfig = Self,
 		>;
 	}
+
+	type UniversityIdOf<T> =
+		<<T as Config>::UniversityProvider as UniversityProvider>::UniversityId;
+	pub(crate) type IntakeIdOf<T> = IntakeId<UniversityIdOf<T>>;
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// New intake application announced
-		NewIntakeAnnounced(IntakeId),
+		NewIntakeAnnounced(IntakeIdOf<T>),
 	}
 
 	#[pallet::error]
@@ -47,20 +51,23 @@ pub mod pallet {
 
 	#[pallet::storage]
 	#[pallet::getter(fn get_intake)]
-	pub type Intakes<T> = StorageMap<_, Twox64Concat, IntakeId, IntakeInfo<BlockNumberOf<T>>>;
+	pub type Intakes<T> = StorageMap<_, Twox64Concat, IntakeIdOf<T>, IntakeInfo<BlockNumberOf<T>>>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn get_intake_closing_date)]
-	pub type IntakeClosingDate<T> =
-		StorageDoubleMap<_, Twox64Concat, BlockNumberOf<T>, Twox64Concat, IntakeId, ()>;
+	pub type IntakeClosingDateLookup<T> =
+		StorageDoubleMap<_, Twox64Concat, BlockNumberOf<T>, Twox64Concat, IntakeIdOf<T>, ()>;
+
+	#[pallet::storage]
+	pub type LastUniIntake<T> = StorageMap<_, Twox64Concat, UniversityIdOf<T>, IntakeIdOf<T>>;
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
 		#[pallet::weight(10_000)]
 		pub fn announce_intake_application(
 			origin: OriginFor<T>,
+			intake_id: IntakeIdOf<T>,
 			university_id: UniversityId,
-			intake_id: IntakeId,
 			intake_info: types::intake::NewIntakeParam<BlockNumberFor<T>>,
 		) -> DispatchResult {
 			let signer = ensure_signed(origin).map_err(|_| Error::<T>::InsufficientPermission)?;
@@ -101,7 +108,8 @@ pub mod pallet {
 				max_accepted,
 				status: intake_status,
 			};
-			Intakes::<T>::insert(&intake_id, intake_info);
+			Intakes::<T>::insert(&intake_id, &intake_info);
+			LastUniIntake::<T>::insert(&university_id, &intake_id);
 
 			Self::deposit_event(Event::<T>::NewIntakeAnnounced(intake_id));
 			Ok(())
@@ -118,7 +126,8 @@ pub mod pallet {
 	#[pallet::hooks]
 	impl<T: Config> Hooks<BlockNumberOf<T>> for Pallet<T> {
 		fn on_initialize(current_block_number: BlockNumberOf<T>) -> Weight {
-			let to_be_closed_intakes = IntakeClosingDate::<T>::drain_prefix(&current_block_number);
+			let to_be_closed_intakes =
+				IntakeClosingDateLookup::<T>::drain_prefix(&current_block_number);
 			// for all to_be_closed_intakes update the status to IntakeStatus::Closed
 			for (intake_id, _) in to_be_closed_intakes {
 				Intakes::<T>::mutate(&intake_id, |intake_info| {
@@ -134,7 +143,7 @@ pub mod pallet {
 }
 
 impl<T: Config> traits::pallet_provider::IntakeProvider for Pallet<T> {
-	type IntakeId = IntakeId;
+	type IntakeId = IntakeIdOf<T>;
 	type IntakeInfo = IntakeInfo<types::BlockNumberOf<T>>;
 
 	fn intake_info(intake_id: &Self::IntakeId) -> Option<Self::IntakeInfo> {

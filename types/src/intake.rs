@@ -1,9 +1,15 @@
-/// Identifier type to uniquely represent a intake
-pub type IntakeId = crate::primitives::UniqId;
-
 use codec::{Decode, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
 use sp_std::fmt::Debug;
+
+// Uniquely identify a intake
+#[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug, MaxEncodedLen)]
+pub struct IntakeId<UniversityId> {
+	pub university_id: UniversityId,
+	pub intake_index: u32,
+	// todo:
+	// pub itake_course_id: CourseId,
+}
 
 /// Required paramater to register this lecture
 #[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug)]
