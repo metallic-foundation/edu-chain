@@ -8,20 +8,20 @@ use scale_info::TypeInfo;
 #[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, Clone, MaxEncodedLen)]
 #[cfg_attr(feature = "std", derive(serde::Deserialize, serde::Serialize))]
 pub struct ValidatorInfo<AccountId> {
-	pub document: StdIpfsLink,
-	pub admin: AccountId,
+    pub document: StdIpfsLink,
+    pub admin: AccountId,
 }
 
 /// Information of the validated university
 #[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, Clone, MaxEncodedLen)]
 pub struct ValidateUniversityParam<UniversityId> {
-	pub university: UniversityId,
+    pub university: UniversityId,
 }
 
 /// Information of the validated professor
 #[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, Clone, MaxEncodedLen)]
 pub struct ValidateProfessorParam<ProfessorId> {
-	pub professor: ProfessorId,
+    pub professor: ProfessorId,
 }
 
 /// Information of the validated university
@@ -37,7 +37,7 @@ pub struct ValidatedProfessorInfo {}
 /// Information required to register a new validator
 #[derive(Decode, Encode, TypeInfo, Debug, Eq, PartialEq, Clone, MaxEncodedLen)]
 pub struct NewValidatorParam {
-	pub document: StdIpfsLink,
+    pub document: StdIpfsLink,
 }
 
 pub type ValidatorInfoFor<T> = ValidatorInfo<crate::AccountIdOf<T>>;

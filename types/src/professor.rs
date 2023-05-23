@@ -16,20 +16,20 @@ use crate::primitives::StdIpfsLink;
 /// Required paramater to register this professor
 #[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug)]
 pub struct NewProfessorParam {
-	pub info: StdIpfsLink,
+    pub info: StdIpfsLink,
 }
 
 /// Information of a professor
 #[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug, MaxEncodedLen)]
 pub struct ProfessorInfo<AccountId> {
-	pub professor: AccountId,
-	pub info: StdIpfsLink,
+    pub professor: AccountId,
+    pub info: StdIpfsLink,
 }
 
 /// Offer Info
 #[derive(Decode, Encode, TypeInfo, Clone, PartialEq, Eq, Debug, MaxEncodedLen)]
 pub struct OfferInfo {
-	pub professor: ProfessorId,
-	pub university: crate::university::UniversityId,
-	pub contract_file: StdIpfsLink,
+    pub professor: ProfessorId,
+    pub university: crate::university::UniversityId,
+    pub contract_file: StdIpfsLink,
 }

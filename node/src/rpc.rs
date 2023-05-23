@@ -6,20 +6,29 @@
 #![warn(missing_docs)]
 
 #[cfg(all(
-	feature = "educhain-testnet-runtime",
-	not(any(feature = "educhain-mainnet-runtime", feature = "educhain-development-runtime"))
+    feature = "educhain-testnet-runtime",
+    not(any(
+        feature = "educhain-mainnet-runtime",
+        feature = "educhain-development-runtime"
+    ))
 ))]
 use educhain_testnet_runtime as educhain_runtime;
 
 #[cfg(all(
-	feature = "educhain-mainnet-runtime",
-	not(any(feature = "educhain-testnet-runtime", feature = "educhain-development-runtime"))
+    feature = "educhain-mainnet-runtime",
+    not(any(
+        feature = "educhain-testnet-runtime",
+        feature = "educhain-development-runtime"
+    ))
 ))]
 use educhain_mainnet_runtime as educhain_runtime;
 
 #[cfg(all(
-	feature = "educhain-development-runtime",
-	not(any(feature = "educhain-mainnet-runtime", feature = "educhain-testnet-runtime"))
+    feature = "educhain-development-runtime",
+    not(any(
+        feature = "educhain-mainnet-runtime",
+        feature = "educhain-testnet-runtime"
+    ))
 ))]
 use educhain_development_runtime as educhain_runtime;
 
@@ -36,40 +45,44 @@ pub use sc_rpc_api::DenyUnsafe;
 
 /// Full client dependencies.
 pub struct FullDeps<C, P> {
-	/// The client instance to use.
-	pub client: Arc<C>,
-	/// Transaction pool instance.
-	pub pool: Arc<P>,
-	/// Whether to deny unsafe calls
-	pub deny_unsafe: DenyUnsafe,
+    /// The client instance to use.
+    pub client: Arc<C>,
+    /// Transaction pool instance.
+    pub pool: Arc<P>,
+    /// Whether to deny unsafe calls
+    pub deny_unsafe: DenyUnsafe,
 }
 
 /// Instantiate all full RPC extensions.
 pub fn create_full<C, P>(
-	deps: FullDeps<C, P>,
+    deps: FullDeps<C, P>,
 ) -> Result<RpcModule<()>, Box<dyn std::error::Error + Send + Sync>>
 where
-	C: ProvideRuntimeApi<Block>,
-	C: HeaderBackend<Block> + HeaderMetadata<Block, Error = BlockChainError> + 'static,
-	C: Send + Sync + 'static,
-	C::Api: substrate_frame_rpc_system::AccountNonceApi<Block, AccountId, Index>,
-	C::Api: pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>,
-	C::Api: BlockBuilder<Block>,
-	P: TransactionPool + 'static,
+    C: ProvideRuntimeApi<Block>,
+    C: HeaderBackend<Block> + HeaderMetadata<Block, Error = BlockChainError> + 'static,
+    C: Send + Sync + 'static,
+    C::Api: substrate_frame_rpc_system::AccountNonceApi<Block, AccountId, Index>,
+    C::Api: pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>,
+    C::Api: BlockBuilder<Block>,
+    P: TransactionPool + 'static,
 {
-	use pallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
-	use substrate_frame_rpc_system::{System, SystemApiServer};
+    use pallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
+    use substrate_frame_rpc_system::{System, SystemApiServer};
 
-	let mut module = RpcModule::new(());
-	let FullDeps { client, pool, deny_unsafe } = deps;
+    let mut module = RpcModule::new(());
+    let FullDeps {
+        client,
+        pool,
+        deny_unsafe,
+    } = deps;
 
-	module.merge(System::new(client.clone(), pool.clone(), deny_unsafe).into_rpc())?;
-	module.merge(TransactionPayment::new(client.clone()).into_rpc())?;
+    module.merge(System::new(client.clone(), pool.clone(), deny_unsafe).into_rpc())?;
+    module.merge(TransactionPayment::new(client.clone()).into_rpc())?;
 
-	// Extend this RPC with a custom API by using the following syntax.
-	// `YourRpcStruct` should have a reference to a client, which is needed
-	// to call into the runtime.
-	// `module.merge(YourRpcTrait::into_rpc(YourRpcStruct::new(ReferenceToClient, ...)))?;`
+    // Extend this RPC with a custom API by using the following syntax.
+    // `YourRpcStruct` should have a reference to a client, which is needed
+    // to call into the runtime.
+    // `module.merge(YourRpcTrait::into_rpc(YourRpcStruct::new(ReferenceToClient, ...)))?;`
 
-	Ok(module)
+    Ok(module)
 }

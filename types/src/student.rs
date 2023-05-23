@@ -15,15 +15,15 @@ pub struct NewStudentParam {}
 
 #[derive(Decode, Encode, TypeInfo, Clone, Debug, PartialEq, Eq, MaxEncodedLen)]
 pub struct NewApplicationParam {
-	pub university: crate::university::UniversityId,
-	pub application: StdIpfsLink,
+    pub university: crate::university::UniversityId,
+    pub application: StdIpfsLink,
 }
 
 #[derive(Decode, Encode, TypeInfo, Clone, Debug, PartialEq, Eq, MaxEncodedLen)]
 pub struct Application<AccountId> {
-	pub applicant: AccountId,
-	pub university: crate::university::UniversityId,
-	pub application: StdIpfsLink,
+    pub applicant: AccountId,
+    pub university: crate::university::UniversityId,
+    pub application: StdIpfsLink,
 }
 
 /// information stored of a student
