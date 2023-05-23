@@ -25,6 +25,13 @@ pub trait ProfessorProvider {
 	fn professor_info(professor_id: &Self::ProfessorId) -> Option<Self::ProfessorInfo>;
 }
 
+pub trait IntakeProvider {
+	type IntakeId;
+	type IntakeInfo;
+
+	fn intake_info(intake_id: &Self::IntakeId) -> Option<Self::IntakeInfo>;
+}
+
 pub trait LectureProvider {
 	fn get_lecture_info();
 }

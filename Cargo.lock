@@ -1439,6 +1439,7 @@ dependencies = [
  "pallet-checked-validation",
  "pallet-exam",
  "pallet-grandpa",
+ "pallet-intake",
  "pallet-lecture",
  "pallet-professor",
  "pallet-randomness-collective-flip",
@@ -3996,6 +3997,22 @@ dependencies = [
  "sp-session",
  "sp-staking",
  "sp-std",
+]
+
+[[package]]
+name = "pallet-intake"
+version = "4.0.0-dev"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "traits",
+ "types",
 ]
 
 [[package]]
@@ -7778,6 +7795,7 @@ name = "traits"
 version = "0.1.0"
 dependencies = [
  "frame-support",
+ "frame-system",
  "types",
 ]
 

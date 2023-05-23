@@ -11,6 +11,7 @@ members = [
     "pallets/checked-validation",
     "traits",
     "types",
+	"pallets/intake",
     # "chain-rpc/rpc",
     # "chain-rpc/runtime-api"
 ]

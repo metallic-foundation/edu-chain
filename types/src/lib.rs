@@ -1,6 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 pub mod exam;
+pub mod intake;
 pub mod lecture;
 pub mod primitives;
 pub mod professor;

@@ -53,6 +53,7 @@ pallet-professor = { default-features = false, path = "../../pallets/professor" 
 pallet-student = { default-features = false, path = "../../pallets/student" }
 pallet-lecture = { default-features = false, path = "../../pallets/lecture" }
 pallet-exam = { default-features = false, path = "../../pallets/exam" }
+pallet-intake = { default-features = false, path = "../../pallets/intake" }
 pallet-scholarship = { default-features = false, path = "../../pallets/scholarship" }
 pallet-checked-validation = { default-features = false, path = "../../pallets/checked-validation" }
 traits = { default-features = false, path = "../../traits" }
@@ -69,6 +70,7 @@ std = [
   	"pallet-lecture/std",
   	"pallet-exam/std",
   	"pallet-scholarship/std",
+	"pallet-intake/std",
 	"pallet-checked-validation/std",
   	"traits/std",
 

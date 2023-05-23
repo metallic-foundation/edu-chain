@@ -332,6 +332,12 @@ impl pallet_checked_validation::Config for Runtime {
 	type StudentProvider = Student;
 }
 
+impl pallet_intake::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type ProfessorProvider = Professor;
+	type UniversityProvider = University;
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub struct Runtime
@@ -350,6 +356,7 @@ construct_runtime!(
 		Sudo: pallet_sudo,
 
 		University: pallet_university::{Pallet, Call, Storage, Event<T>},
+		Intake: pallet_intake::{Pallet, Call, Storage, Event<T>},
 		Professor: pallet_professor::{Pallet, Call, Storage, Event<T>},
 		Student: pallet_student::{Pallet, Call, Storage, Event<T>},
 		Lecture: pallet_lecture::{Pallet, Call, Storage, Event<T>},
