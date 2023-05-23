@@ -14,8 +14,12 @@ pub trait StudentProvider {
 pub trait UniversityProvider {
 	type UniversityId;
 	type UniversityInfo;
+	type FrameConfig: frame_system::Config;
 
 	fn university_info(university_id: &Self::UniversityId) -> Option<Self::UniversityInfo>;
+	fn university_admin(
+		university_id: &Self::UniversityId,
+	) -> Option<types::AccountIdOf<Self::FrameConfig>>;
 }
 
 pub trait ProfessorProvider {

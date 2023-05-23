@@ -22,6 +22,7 @@ pub mod pallet {
 		type ProfessorProvider: pallet_provider_traits::ProfessorProvider;
 		type UniversityProvider: pallet_provider_traits::UniversityProvider<
 			UniversityId = types::university::UniversityId,
+            FrameConfig = Self,
 		>;
 	}
 
@@ -63,12 +64,11 @@ pub mod pallet {
 			intake_info: types::intake::NewIntakeParam<BlockNumberFor<T>>,
 		) -> DispatchResult {
 			let signer = ensure_signed(origin).map_err(|_| Error::<T>::InsufficientPermission)?;
-			// let university_admin =
-			// T::UniversityProvider::university_admin(&university_id).
-			// ok_or(Error::<T>::NonExistentUniversity)?;
+			let university_admin = T::UniversityProvider::university_admin(&university_id)
+				.ok_or(Error::<T>::NonExistentUniversity)?;
 
 			// only university can announce new intake
-			// ensure!(signer == university_admin, Error::<T>::InsufficientPermission);
+			ensure!(signer == university_admin, Error::<T>::InsufficientPermission);
 			// intake id must be unique
 			ensure!(!Intakes::<T>::contains_key(&intake_id), Error::<T>::IntakeExists);
 

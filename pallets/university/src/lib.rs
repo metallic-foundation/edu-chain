@@ -206,8 +206,15 @@ pub mod pallet {
 impl<T: Config> pallet_provider_traits::UniversityProvider for Pallet<T> {
 	type UniversityId = crate::UniversityId;
 	type UniversityInfo = crate::UniversityInfoFor<T>;
+	type FrameConfig = T;
 
 	fn university_info(university_id: &Self::UniversityId) -> Option<Self::UniversityInfo> {
 		crate::Pallet::<T>::get_university(university_id)
+	}
+
+	fn university_admin(
+		university_id: &Self::UniversityId,
+	) -> Option<types::AccountIdOf<Self::FrameConfig>> {
+		Self::university_info(university_id).map(|info| info.admin)
 	}
 }
