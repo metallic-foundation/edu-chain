@@ -50,3 +50,6 @@ pub struct IntakeApplication<BlockNumber> {
     /// application details
     pub info: StdIpfsLink,
 }
+
+/// limit on how many application can be accepted at once
+pub type AcceptApplicationLimit = u32;

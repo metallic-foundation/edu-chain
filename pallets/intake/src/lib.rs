@@ -41,6 +41,8 @@ pub mod pallet {
         AppliedForIntake(IntakeIdOf<T>, StudentIdOf<T>),
         /// Application has been withdrawn
         ApplicationWithdrawn(IntakeIdOf<T>, StudentIdOf<T>),
+        /// application has been accepted by university
+        ApplicationAccepted(IntakeIdOf<T>, StudentIdOf<T>),
     }
 
     #[pallet::error]
@@ -57,6 +59,10 @@ pub mod pallet {
         NonExistentIntake,
         /// Intake closed
         IntakeClosed,
+        /// Intake is still ongoing
+        IntakeOngoing,
+        /// application does not exsist
+        NonExistentApplication,
     }
 
     #[pallet::storage]
@@ -70,6 +76,11 @@ pub mod pallet {
 
     #[pallet::storage]
     pub type LastUniIntake<T> = StorageMap<_, Twox64Concat, UniversityIdOf<T>, IntakeIdOf<T>>;
+
+    #[pallet::storage]
+    #[pallet::getter(fn get_accepted_application)]
+    pub type AcceptedApplications<T> =
+        StorageDoubleMap<_, Twox64Concat, IntakeIdOf<T>, Twox64Concat, StudentIdOf<T>, ()>;
 
     #[pallet::storage]
     pub type Applications<T> = StorageDoubleMap<
@@ -205,6 +216,52 @@ pub mod pallet {
 
             // emit the event
             Self::deposit_event(Event::ApplicationWithdrawn(intake_id, student_id));
+
+            Ok(())
+        }
+
+        #[pallet::weight(10_000)]
+        pub fn accept_application(
+            origin: OriginFor<T>,
+            intake_id: IntakeIdOf<T>,
+            student_id: StudentIdOf<T>,
+        ) -> DispatchResult {
+            let signer = ensure_signed(origin).map_err(|_| Error::<T>::InsufficientPermission)?;
+            let university_admin =
+                T::UniversityProvider::university_admin(&intake_id.university_id)
+                    .ok_or(Error::<T>::NonExistentUniversity)?;
+
+            // only university can accept application
+            ensure!(
+                signer == university_admin,
+                Error::<T>::InsufficientPermission
+            );
+
+            // get intake info
+            let intake_info = Self::get_intake(&intake_id).ok_or(Error::<T>::NonExistentIntake)?;
+            // ensre intake is closed
+            ensure!(
+                intake_info.status == IntakeStatus::IntakeClosed,
+                Error::<T>::IntakeOngoing,
+            );
+
+            // ensure application of this student exists
+            ensure!(
+                Applications::<T>::contains_key(&intake_id, &student_id),
+                Error::<T>::NonExistentApplication,
+            );
+
+            // ensure this student has not been accepted before
+            ensure!(
+                !AcceptedApplications::<T>::contains_key(&intake_id, &student_id),
+                Error::<T>::InvalidParamater,
+            );
+
+            // put into accepted applications
+            AcceptedApplications::<T>::insert(&intake_id, &student_id, ());
+
+            // emit event
+            Self::deposit_event(Event::ApplicationAccepted(intake_id, student_id));
 
             Ok(())
         }
