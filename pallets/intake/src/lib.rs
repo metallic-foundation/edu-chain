@@ -125,6 +125,7 @@ pub mod pallet {
         }
     }
 
+    // extrinsic helpers
     impl<T: Config> Pallet<T> {
         pub fn current_block_number() -> BlockNumberOf<T> {
             <frame_system::Pallet<T>>::block_number()
@@ -135,10 +136,24 @@ pub mod pallet {
     #[pallet::hooks]
     impl<T: Config> Hooks<BlockNumberOf<T>> for Pallet<T> {
         fn on_initialize(current_block_number: BlockNumberOf<T>) -> Weight {
-            let to_be_closed_intakes =
-                IntakeClosingDateLookup::<T>::drain_prefix(&current_block_number);
-            // for all to_be_closed_intakes update the status to IntakeStatus::Closed
-            for (intake_id, _) in to_be_closed_intakes {
+            let mut weight_consumed = Weight::zero();
+
+            // delete intake info when the intake closing date has passed
+            weight_consumed += Self::mark_close_intakes(current_block_number);
+
+            // return weight consumed
+            weight_consumed
+        }
+    }
+
+    // hooks helpers
+    impl<T: Config> Pallet<T> {
+        /// delete intake info when the intake closing date has passed
+        fn mark_close_intakes(block_number: BlockNumberOf<T>) -> Weight {
+            let weight_consumed = Weight::zero();
+
+            let to_expire_intakes = IntakeClosingDateLookup::<T>::drain_prefix(&block_number);
+            for (intake_id, _) in to_expire_intakes {
                 Intakes::<T>::mutate(&intake_id, |intake_info| {
                     if let Some(intake_info) = intake_info {
                         intake_info.status = IntakeStatus::IntakeClosed;
@@ -146,7 +161,7 @@ pub mod pallet {
                 });
             }
 
-            Weight::zero()
+            weight_consumed
         }
     }
 }
