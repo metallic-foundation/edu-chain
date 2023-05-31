@@ -9,7 +9,7 @@ pub mod pallet {
     use pallet_provider_traits::UniversityProvider;
     use traits::pallet_provider as pallet_provider_traits;
     pub(super) use types::intake::*;
-    use types::{university::UniversityId, BlockNumberOf};
+    use types::{primitives::*, university::UniversityId, BlockNumberOf};
 
     #[pallet::pallet]
     #[pallet::generate_store(pub(super) trait Store)]
@@ -26,27 +26,35 @@ pub mod pallet {
         >;
     }
 
+    type StudentIdOf<T> = AccountIdOf<T>;
     type UniversityIdOf<T> =
         <<T as Config>::UniversityProvider as UniversityProvider>::UniversityId;
     pub(crate) type IntakeIdOf<T> = IntakeId<UniversityIdOf<T>>;
+    pub(crate) type IntakeApplicationOf<T> = IntakeApplication<BlockNumberFor<T>>;
 
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
     pub enum Event<T: Config> {
         /// New intake application announced
         NewIntakeAnnounced(IntakeIdOf<T>),
+        /// New intake application submitted
+        AppliedForIntake(IntakeIdOf<T>, StudentIdOf<T>),
     }
 
     #[pallet::error]
     pub enum Error<T> {
-        // Cannot perform this action due to mismatched permission
+        /// Cannot perform this action due to mismatched permission
         InsufficientPermission,
-        /// No such enrollment application
+        /// Intake already exists
         IntakeExists,
         /// No such university
         NonExistentUniversity,
         /// Invalid parameter
         InvalidParamater,
+        /// Intake does not exists
+        NonExistentIntake,
+        /// Intake closed
+        IntakeClosed,
     }
 
     #[pallet::storage]
@@ -61,8 +69,52 @@ pub mod pallet {
     #[pallet::storage]
     pub type LastUniIntake<T> = StorageMap<_, Twox64Concat, UniversityIdOf<T>, IntakeIdOf<T>>;
 
+    #[pallet::storage]
+    pub type Applications<T> = StorageDoubleMap<
+        _,
+        Twox64Concat,
+        IntakeIdOf<T>,
+        Twox64Concat,
+        StudentIdOf<T>,
+        IntakeApplicationOf<T>,
+    >;
+
     #[pallet::call]
     impl<T: Config> Pallet<T> {
+        #[pallet::weight(10_000)]
+        pub fn apply_for_intake(
+            origin: OriginFor<T>,
+            intake_id: IntakeIdOf<T>,
+            mut application: IntakeApplicationOf<T>,
+        ) -> DispatchResult {
+            let student_id =
+                ensure_signed(origin).map_err(|_| Error::<T>::InsufficientPermission)?;
+
+            // Get intake info
+            let intake_info = Intakes::<T>::get(&intake_id).ok_or(Error::<T>::NonExistentIntake)?;
+            // ensure instake status is open
+            ensure!(
+                intake_info.status == IntakeStatus::IntakeOngoing,
+                Error::<T>::IntakeClosed,
+            );
+            // ensure this student has not applied for same intake before
+            ensure!(
+                !Applications::<T>::contains_key(&intake_id, &student_id),
+                Error::<T>::InvalidParamater,
+            );
+
+            // modify the application applied date
+            application.applied_on = Self::current_block_number();
+
+            // put the application
+            Applications::<T>::insert(&intake_id, &student_id, application);
+
+            // emit event
+            Self::deposit_event(Event::AppliedForIntake(intake_id, student_id));
+
+            Ok(())
+        }
+
         #[pallet::weight(10_000)]
         pub fn announce_intake_application(
             origin: OriginFor<T>,
