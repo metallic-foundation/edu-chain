@@ -43,6 +43,8 @@ pub mod pallet {
         ApplicationWithdrawn(IntakeIdOf<T>, StudentIdOf<T>),
         /// application has been accepted by university
         ApplicationAccepted(IntakeIdOf<T>, StudentIdOf<T>),
+        /// An intake have been finalised
+        IntakeFinalised(IntakeIdOf<T>),
     }
 
     #[pallet::error]
@@ -63,6 +65,8 @@ pub mod pallet {
         IntakeOngoing,
         /// application does not exsist
         NonExistentApplication,
+        /// Intake is not closed
+        IntakeNotClosed,
     }
 
     #[pallet::storage]
@@ -216,6 +220,40 @@ pub mod pallet {
 
             // emit the event
             Self::deposit_event(Event::ApplicationWithdrawn(intake_id, student_id));
+
+            Ok(())
+        }
+
+        #[pallet::weight(10_000)]
+        pub fn finalise_intake(origin: OriginFor<T>, intake_id: IntakeIdOf<T>) -> DispatchResult {
+            let signer = ensure_signed(origin).map_err(|_| Error::<T>::InsufficientPermission)?;
+            let university_admin =
+                T::UniversityProvider::university_admin(&intake_id.university_id)
+                    .ok_or(Error::<T>::NonExistentUniversity)?;
+            ensure!(
+                signer == university_admin,
+                Error::<T>::InsufficientPermission
+            );
+
+            // ensure intake status us Closed
+            let intake_info = Self::get_intake(&intake_id).ok_or(Error::<T>::NonExistentIntake)?;
+            ensure!(
+                intake_info.status == IntakeStatus::IntakeClosed,
+                Error::<T>::IntakeNotClosed,
+            );
+
+            // update status to Finalised
+            Intakes::<T>::mutate(&intake_id, |intake_info| {
+                if let Some(intake_info) = intake_info {
+                    intake_info.status = IntakeStatus::IntakeFinalised
+                };
+            });
+
+            // remove all applications
+            Applications::<T>::remove_prefix(&intake_id, None);
+
+            // emit the event
+            Self::deposit_event(Event::<T>::IntakeFinalised(intake_id));
 
             Ok(())
         }
