@@ -39,6 +39,8 @@ pub mod pallet {
         NewIntakeAnnounced(IntakeIdOf<T>),
         /// New intake application submitted
         AppliedForIntake(IntakeIdOf<T>, StudentIdOf<T>),
+        /// Application has been withdrawn
+        ApplicationWithdrawn(IntakeIdOf<T>, StudentIdOf<T>),
     }
 
     #[pallet::error]
@@ -91,7 +93,7 @@ pub mod pallet {
                 ensure_signed(origin).map_err(|_| Error::<T>::InsufficientPermission)?;
 
             // Get intake info
-            let intake_info = Intakes::<T>::get(&intake_id).ok_or(Error::<T>::NonExistentIntake)?;
+            let intake_info = Self::get_intake(&intake_id).ok_or(Error::<T>::NonExistentIntake)?;
             // ensure instake status is open
             ensure!(
                 intake_info.status == IntakeStatus::IntakeOngoing,
@@ -173,6 +175,37 @@ pub mod pallet {
             LastUniIntake::<T>::insert(&university_id, &intake_id);
 
             Self::deposit_event(Event::<T>::NewIntakeAnnounced(intake_id));
+            Ok(())
+        }
+
+        #[pallet::weight(10_000)]
+        pub fn withdraw_application(
+            origin: OriginFor<T>,
+            intake_id: IntakeIdOf<T>,
+        ) -> DispatchResult {
+            let student_id =
+                ensure_signed(origin).map_err(|_| Error::<T>::InsufficientPermission)?;
+
+            // ensure the application was applied for
+            ensure!(
+                Applications::<T>::contains_key(&intake_id, &student_id),
+                Error::<T>::InvalidParamater,
+            );
+
+            // ensure intake exists
+            let intake_info = Self::get_intake(&intake_id).ok_or(Error::<T>::NonExistentIntake)?;
+            // application can be revoked only on ongoing intakes
+            ensure!(
+                intake_info.status == IntakeStatus::IntakeOngoing,
+                Error::<T>::IntakeClosed,
+            );
+
+            // remove the application
+            Applications::<T>::remove(&intake_id, &student_id);
+
+            // emit the event
+            Self::deposit_event(Event::ApplicationWithdrawn(intake_id, student_id));
+
             Ok(())
         }
     }
