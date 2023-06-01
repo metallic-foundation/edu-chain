@@ -1,5 +1,5 @@
 [package]
-name = "node-template"
+name = "edu-chain"
 version = "4.0.0-dev"
 description = "A fresh FRAME-based Substrate node, ready for hacking."
 authors = ["Substrate DevHub <https://github.com/substrate-developer-hub>"]
@@ -14,7 +14,7 @@ build = "build.rs"
 targets = ["x86_64-unknown-linux-gnu"]
 
 [[bin]]
-name = "node-template"
+name = "edu-chain"
 
 [dependencies]
 clap = { version = "4.0.9", features = ["derive"] }
@@ -59,7 +59,9 @@ frame-benchmarking = { version = "4.0.0-dev", git = "https://github.com/parityte
 frame-benchmarking-cli = { version = "4.0.0-dev", git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.42" }
 
 # Local Dependencies
-node-template-runtime = { version = "4.0.0-dev", path = "../runtime" }
+educhain-development-runtime = { path = "../runtime/development" }
+educhain-mainnet-runtime = { path = "../runtime/mainnet" }
+educhain-testnet-runtime = { path = "../runtime/testnet" }
 
 # CLI-specific dependencies
 try-runtime-cli = { version = "0.10.0-dev", optional = true, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.42" }
@@ -68,13 +70,22 @@ try-runtime-cli = { version = "0.10.0-dev", optional = true, git = "https://gith
 substrate-build-script-utils = { version = "3.0.0", git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.42" }
 
 [features]
-default = []
-# Dependencies that are only required if runtime benchmarking should be build.
+default = ["educhain-testnet-runtime"]
+educhain-testnet-runtime = []
+educhain-development-runtime = []
+educhain-mainnet-runtime = []
 runtime-benchmarks = [
-	"node-template-runtime/runtime-benchmarks",
 	"frame-benchmarking/runtime-benchmarks",
 	"frame-benchmarking-cli/runtime-benchmarks",
+
+	"educhain-testnet-runtime/runtime-benchmarks",
+	"educhain-development-runtime/runtime-benchmarks",
+	"educhain-mainnet-runtime/runtime-benchmarks",
 ]
-# Enable features that allow the runtime to be tried and debugged. Name might be subject to change
-# in the near future.
-try-runtime = ["node-template-runtime/try-runtime", "try-runtime-cli/try-runtime"]
+try-runtime = [
+	"educhain-development-runtime/try-runtime",
+	"educhain-testnet-runtime/try-runtime",
+	"educhain-mainnet-runtime/try-runtime",
+
+	"try-runtime-cli/try-runtime"
+]

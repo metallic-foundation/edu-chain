@@ -5,10 +5,37 @@
 
 #![warn(missing_docs)]
 
+#[cfg(all(
+    feature = "educhain-testnet-runtime",
+    not(any(
+        feature = "educhain-mainnet-runtime",
+        feature = "educhain-development-runtime"
+    ))
+))]
+use educhain_testnet_runtime as educhain_runtime;
+
+#[cfg(all(
+    feature = "educhain-mainnet-runtime",
+    not(any(
+        feature = "educhain-testnet-runtime",
+        feature = "educhain-development-runtime"
+    ))
+))]
+use educhain_mainnet_runtime as educhain_runtime;
+
+#[cfg(all(
+    feature = "educhain-development-runtime",
+    not(any(
+        feature = "educhain-mainnet-runtime",
+        feature = "educhain-testnet-runtime"
+    ))
+))]
+use educhain_development_runtime as educhain_runtime;
+
 use std::sync::Arc;
 
 use jsonrpsee::RpcModule;
-use node_template_runtime::{opaque::Block, AccountId, Balance, Index};
+use educhain_runtime::{opaque::Block, AccountId, Balance, Index};
 use sc_transaction_pool_api::TransactionPool;
 use sp_api::ProvideRuntimeApi;
 use sp_block_builder::BlockBuilder;

@@ -1,8 +1,17 @@
 [workspace]
 members = [
     "node",
-    "pallets/template",
-    "runtime",
+    "runtime/testnet",
+    "pallets/university",
+    "pallets/professor",
+    "pallets/student",
+    "pallets/lecture",
+    "pallets/exam",
+    "pallets/scholarship",
+    "pallets/checked-validation",
+    "traits",
+    "types",
+	"pallets/intake",
 ]
 [profile.release]
 panic = "unwind"

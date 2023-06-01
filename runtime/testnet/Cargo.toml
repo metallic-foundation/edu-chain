@@ -1,11 +1,11 @@
 [package]
-name = "node-template-runtime"
+name = "educhain-testnet-runtime"
 version = "4.0.0-dev"
 description = "A fresh FRAME-based Substrate node, ready for hacking."
 authors = ["Substrate DevHub <https://github.com/substrate-developer-hub>"]
 homepage = "https://substrate.io/"
 edition = "2021"
-license = "MIT-0"
+license = "Unlicense"
 publish = false
 repository = "https://github.com/substrate-developer-hub/substrate-node-template/"
 
@@ -13,8 +13,8 @@ repository = "https://github.com/substrate-developer-hub/substrate-node-template
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-codec = { package = "parity-scale-codec", version = "3.2.2", default-features = false, features = ["derive"] }
-scale-info = { version = "2.5.0", default-features = false, features = ["derive"] }
+codec = { package = "parity-scale-codec", version = "3.0.0", default-features = false, features = ["derive"] }
+scale-info = { version = "2.1.1", default-features = false, features = ["derive"] }
 
 pallet-aura = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.42" }
 pallet-balances = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.42" }
@@ -48,14 +48,32 @@ frame-benchmarking = { version = "4.0.0-dev", default-features = false, git = "h
 frame-system-benchmarking = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", optional = true , branch = "polkadot-v0.9.42" }
 
 # Local Dependencies
-pallet-template = { version = "4.0.0-dev", default-features = false, path = "../pallets/template" }
+pallet-university = { default-features = false, path = "../../pallets/university" }
+pallet-professor = { default-features = false, path = "../../pallets/professor" }
+pallet-student = { default-features = false, path = "../../pallets/student" }
+pallet-lecture = { default-features = false, path = "../../pallets/lecture" }
+pallet-exam = { default-features = false, path = "../../pallets/exam" }
+pallet-intake = { default-features = false, path = "../../pallets/intake" }
+pallet-scholarship = { default-features = false, path = "../../pallets/scholarship" }
+pallet-checked-validation = { default-features = false, path = "../../pallets/checked-validation" }
+traits = { default-features = false, path = "../../traits" }
 
 [build-dependencies]
-substrate-wasm-builder = { version = "5.0.0-dev", git = "https://github.com/paritytech/substrate.git", optional = true , branch = "polkadot-v0.9.42" }
+substrate-wasm-builder = { version = "5.0.0-dev", git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.42" }
 
 [features]
 default = ["std"]
 std = [
+	"pallet-university/std",
+	"pallet-professor/std",
+	"pallet-student/std",
+  	"pallet-lecture/std",
+  	"pallet-exam/std",
+  	"pallet-scholarship/std",
+	"pallet-intake/std",
+	"pallet-checked-validation/std",
+  	"traits/std",
+
 	"frame-try-runtime?/std",
 	"frame-system-benchmarking?/std",
 	"frame-benchmarking?/std",
@@ -70,7 +88,6 @@ std = [
 	"pallet-balances/std",
 	"pallet-grandpa/std",
 	"pallet-sudo/std",
-	"pallet-template/std",
 	"pallet-timestamp/std",
 	"pallet-transaction-payment-rpc-runtime-api/std",
 	"pallet-transaction-payment/std",
@@ -86,21 +103,35 @@ std = [
 	"sp-std/std",
 	"sp-transaction-pool/std",
 	"sp-version/std",
-	"substrate-wasm-builder",
 ]
 runtime-benchmarks = [
+	"pallet-university/runtime-benchmarks",
+	"pallet-professor/runtime-benchmarks",
+	"pallet-student/runtime-benchmarks",
+	"pallet-lecture/runtime-benchmarks",
+	"pallet-exam/runtime-benchmarks",
+	"pallet-scholarship/runtime-benchmarks",
+	"pallet-checked-validation/runtime-benchmarks",
+
 	"frame-benchmarking/runtime-benchmarks",
 	"frame-support/runtime-benchmarks",
 	"frame-system-benchmarking/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
 	"pallet-grandpa/runtime-benchmarks",
-	"pallet-template/runtime-benchmarks",
 	"pallet-timestamp/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"frame-try-runtime/try-runtime",
+	"pallet-university/try-runtime",
+	"pallet-professor/try-runtime",
+	"pallet-student/try-runtime",
+	"pallet-lecture/try-runtime",
+	"pallet-lecture/try-runtime",
+	"pallet-scholarship/try-runtime",
+	"pallet-checked-validation/try-runtime",
+
+	"frame-try-runtime",
 	"frame-executive/try-runtime",
 	"frame-system/try-runtime",
 	"frame-support/try-runtime",
@@ -108,7 +139,6 @@ try-runtime = [
 	"pallet-balances/try-runtime",
 	"pallet-grandpa/try-runtime",
 	"pallet-sudo/try-runtime",
-	"pallet-template/try-runtime",
 	"pallet-timestamp/try-runtime",
 	"pallet-transaction-payment/try-runtime",
 ]

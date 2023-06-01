@@ -45,9 +45,6 @@ use pallet_transaction_payment::{ConstFeeMultiplier, CurrencyAdapter, Multiplier
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
 
-/// Import the template pallet.
-pub use pallet_template;
-
 /// An index to a block.
 pub type BlockNumber = u32;
 
@@ -267,30 +264,90 @@ impl pallet_sudo::Config for Runtime {
 	type RuntimeCall = RuntimeCall;
 }
 
-/// Configure the pallet-template in pallets/template.
-impl pallet_template::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = pallet_template::weights::SubstrateWeight<Runtime>;
+impl pallet_university::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type ProfessorProvider = Professor;
+    type StudentProvider = Student;
+    type LectureProvider = Lecture;
+    type ExamProvider = Exam;
+    type ScholarshipProvider = Scholarship;
+}
+
+impl pallet_professor::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type UniversityProvider = University;
+    type StudentProvider = Student;
+}
+
+impl pallet_student::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type UniversityProvider = University;
+    type ProfessorProvider = Professor;
+}
+
+impl pallet_lecture::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type UniversityProvider = University;
+    type ProfessorProvider = Professor;
+    type StudentProvider = Student;
+}
+
+impl pallet_exam::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type UniversityProvider = University;
+    type ProfessorProvider = Professor;
+    type StudentProvider = Student;
+    type LectureProvider = Lecture;
+}
+
+impl pallet_scholarship::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type UniversityProvider = University;
+    type ProfessorProvider = Professor;
+    type StudentProvider = Student;
+    type LectureProvider = Lecture;
+    type ExamProvider = Exam;
+}
+
+impl pallet_checked_validation::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type UniversityProvider = University;
+    type ProfessorProvider = Professor;
+    type StudentProvider = Student;
+}
+
+impl pallet_intake::Config for Runtime {
+    type RuntimeEvent = RuntimeEvent;
+    type ProfessorProvider = Professor;
+    type UniversityProvider = University;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
-	pub struct Runtime
-	where
-		Block = Block,
-		NodeBlock = opaque::Block,
-		UncheckedExtrinsic = UncheckedExtrinsic,
-	{
-		System: frame_system,
-		Timestamp: pallet_timestamp,
-		Aura: pallet_aura,
-		Grandpa: pallet_grandpa,
-		Balances: pallet_balances,
-		TransactionPayment: pallet_transaction_payment,
-		Sudo: pallet_sudo,
-		// Include the custom logic from the pallet-template in the runtime.
-		TemplateModule: pallet_template,
-	}
+    pub struct Runtime
+    where
+        Block = Block,
+        NodeBlock = opaque::Block,
+        UncheckedExtrinsic = UncheckedExtrinsic,
+    {
+        System: frame_system,
+        Timestamp: pallet_timestamp,
+        Aura: pallet_aura,
+        Grandpa: pallet_grandpa,
+        Balances: pallet_balances,
+        TransactionPayment: pallet_transaction_payment,
+        Sudo: pallet_sudo,
+
+        University: pallet_university::{Pallet, Call, Storage, Event<T>},
+        Intake: pallet_intake::{Pallet, Call, Storage, Event<T>},
+        Professor: pallet_professor::{Pallet, Call, Storage, Event<T>},
+        Student: pallet_student::{Pallet, Call, Storage, Event<T>},
+        Lecture: pallet_lecture::{Pallet, Call, Storage, Event<T>},
+        Exam: pallet_exam::{Pallet, Call, Storage, Event<T>},
+        Scholarship: pallet_scholarship::{Pallet, Call, Storage, Event<T>},
+        CheckedValidation: pallet_checked_validation::{Pallet, Call, Storage, Event<T>},
+    }
+
 );
 
 /// The address format for describing accounts.
